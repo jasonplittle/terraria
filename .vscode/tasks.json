@@ -1,0 +1,70 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CMake: Configure (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["-S", ".", "-B", "build_deb", "-G", "MinGW Makefiles", "-DCMAKE_BUILD_TYPE=Debug", "-DCMAKE_C_COMPILER=gcc", "-DCMAKE_CXX_COMPILER=g++", "-DCMAKE_POLICY_VERSION_MINIMUM='3.5'"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: Build (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "build_deb", "--config", "Debug"],
+      "group": "build",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "CMake: Configure (Run)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["-S", ".", "-B", "build_run", "-G", "MinGW Makefiles", "-DCMAKE_C_COMPILER=gcc", "-DCMAKE_CXX_COMPILER=g++", "-DCMAKE_POLICY_VERSION_MINIMUM='3.5'"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: Build (Run)",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "build_run"],
+      "group": "build",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Clean Build",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-Command", "Remove-Item -Recurse -Force build_deb, build_run -ErrorAction SilentlyContinue; Write-Host 'Build directories cleaned'"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": []
+}
