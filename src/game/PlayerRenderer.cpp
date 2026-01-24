@@ -46,20 +46,13 @@ void PlayerRenderer::Render(const Player& player)
 
     for (const auto& sprite : player.GetSprites())
     {
-        Vec4 uv = sprite->GetUV();
+        Vec4 color = sprite->GetColor();
+        Vec4 uv = sprite->GetAtlasCoords(!player.IsMovingRight());
+        
         m_shader->Bind();
         m_shader->SetUniformMat4f("u_MVP", mvp);
-        
-
-        if (player.IsMovingRight())
-        {
-            m_shader->SetUniform4f("u_UV", uv.x, uv.y, uv.z, uv.w);
-        }
-        else
-        {
-            m_shader->SetUniform4f("u_UV", uv.z, uv.y, uv.x, uv.w);
-        }
-
+        m_shader->SetUniform4f("u_Color", color.x, color.y, color.z, color.w);
+        m_shader->SetUniform4f("u_UV", uv.x, uv.y, uv.z, uv.w);
         
         sprite->GetTexture().Bind();
         m_shader->SetUniform1i("u_Texture", 0);
