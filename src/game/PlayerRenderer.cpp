@@ -1,0 +1,69 @@
+#include "PlayerRenderer.hpp"
+
+
+PlayerRenderer::PlayerRenderer()
+{
+    unsigned int indicies[] = {
+        0, 1, 2,
+        2, 3, 0,
+    };
+
+    float verticies[] = {
+        -0.5f, -0.5f, 0.0f, 0.0f,
+         0.5f, -0.5f, 1.0f, 0.0f,
+         0.5f,  0.5f, 1.0f, 1.0f,
+        -0.5f,  0.5f, 0.0f, 1.0f
+    };
+
+    m_shader = std::make_unique<Shader>("src/renderer/shaders/Texture.shader");
+
+    m_vertexArray = std::make_unique<VertexArray>();
+    m_indexBuffer = std::make_unique<IndexBuffer>(indicies, 6);
+    m_vertexBuffer = std::make_unique<VertexBuffer>(verticies, 4 * 4 * sizeof(float));
+
+    VertexBufferLayout layout;
+
+    layout.Push<float>(2);
+    layout.Push<float>(2);
+    m_vertexArray->AddBuffer(*m_vertexBuffer, layout);
+}
+
+
+void PlayerRenderer::Render(const Player& player)
+{
+    Renderer renderer;
+
+    Vec2 playerPostion = player.GetPlayerPosition();
+
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(playerPostion.x, playerPostion.y, 0.0));
+    model = glm::scale(model, glm::vec3(100.0f, 100.0f, 1.0f));
+
+    glm::mat4 projection = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    
+    glm::mat4 mvp = projection * view * model;
+
+
+    for (const auto& sprite : player.GetSprites())
+    {
+        Vec4 uv = sprite->GetUV();
+        m_shader->Bind();
+        m_shader->SetUniformMat4f("u_MVP", mvp);
+        
+
+        if (player.IsMovingRight())
+        {
+            m_shader->SetUniform4f("u_UV", uv.x, uv.y, uv.z, uv.w);
+        }
+        else
+        {
+            m_shader->SetUniform4f("u_UV", uv.z, uv.y, uv.x, uv.w);
+        }
+
+        
+        sprite->GetTexture().Bind();
+        m_shader->SetUniform1i("u_Texture", 0);
+        renderer.Draw(*m_vertexArray, *m_indexBuffer, *m_shader);
+    }
+}
+

@@ -2,10 +2,12 @@
 
 #include "Renderer.hpp"
 
+#include "UtilLib.hpp"
+
+
 class Texture
 {
 public:
-
     Texture(const std::string& path);
     ~Texture();
 

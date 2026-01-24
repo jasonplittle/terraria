@@ -12,6 +12,9 @@ add_subdirectory(thirdparty/stb_image)
 add_executable("${CMAKE_PROJECT_NAME}" 
     ${CMAKE_SOURCE_DIR}/src/Application.cpp
     ${CMAKE_SOURCE_DIR}/src/platform/Input.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/Player.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/Sprite.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/PlayerRenderer.cpp
 
     ${CMAKE_SOURCE_DIR}/src/renderer/Renderer.cpp 
     ${CMAKE_SOURCE_DIR}/src/renderer/IndexBuffer.cpp 
@@ -21,7 +24,6 @@ add_executable("${CMAKE_PROJECT_NAME}"
     ${CMAKE_SOURCE_DIR}/src/renderer/ErrorUtils.cpp
     ${CMAKE_SOURCE_DIR}/src/renderer/Shader.cpp
     ${CMAKE_SOURCE_DIR}/src/renderer/Texture.cpp
-    ${CMAKE_SOURCE_DIR}/src/renderer/Rectangle.cpp
 )
 
 target_link_libraries("${CMAKE_PROJECT_NAME}" 

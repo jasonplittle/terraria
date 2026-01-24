@@ -9,30 +9,12 @@
 
 
 #include "Renderer.hpp"
-#include "Rectangle.hpp"
 
 #include "Input.hpp"
 
+#include "Player.hpp"
+#include "PlayerRenderer.hpp"
 
-
-
-void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods)
-{
-    
-    if (action == GLFW_PRESS)
-    {
-
-    }
-    else if (action == GLFW_RELEASE)
-    {
-
-    }
-    else
-    {
-        return;
-    }
-
-}
 
 
 
@@ -71,7 +53,8 @@ int main()
     Renderer renderer;
     renderer.EnableBlending();
 
-    Rectangle rect = Rectangle(0.0f, 0.0f, 100.0f, 150.0f, { 0.18f, 0.6f, 0.96f, 0.5f });
+    Player player = Player();
+    PlayerRenderer playerRenderer = PlayerRenderer();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -79,22 +62,22 @@ int main()
 
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_UP))
         {
-            rect.UpdatePosition(0.0f, 5.0f);
+            player.UpdatePosition(0.0f, 5.0f);
         }
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_DOWN))
         {
-            rect.UpdatePosition(0.0f, -5.0f);
+            player.UpdatePosition(0.0f, -5.0f);
         }
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_LEFT))
         {
-            rect.UpdatePosition(-5.0f, 0.0f);
+            player.UpdatePosition(-5.0f, 0.0f);
         }
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_RIGHT))
         {
-            rect.UpdatePosition(5.0f, 0.0f);
+            player.UpdatePosition(5.0f, 0.0f);
         }
-
-        rect.Draw(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f));
+        
+        playerRenderer.Render(player);
 
         glfwSwapBuffers(window);
 		glfwPollEvents();
