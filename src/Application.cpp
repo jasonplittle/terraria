@@ -31,7 +31,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(960, 540, "Terraria", nullptr, nullptr);
+    window = glfwCreateWindow(1280, 720, "Terraria", nullptr, nullptr);
 
     if (!window)
     {
@@ -97,7 +97,7 @@ int main()
         lastTime = currentTime;
 
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight);
-        playerRenderer.Render(player);
+        playerRenderer.Render(player, {1280.0f, 720.0f});
 
         glfwSwapBuffers(window);
 		glfwPollEvents();

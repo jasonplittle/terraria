@@ -19,10 +19,7 @@ class PlayerRenderer
 public:
     PlayerRenderer();
 
-    void Render(const Player& player);
-
-
-
+    void Render(const Player& player, Vec2 screenSize);
 
 private:
     std::unique_ptr<Shader> m_shader;

@@ -18,8 +18,8 @@ enum PlayerPart
     LEFT_ARM,
     TORSO,
     RIGHT_ARM,
-    LEGS,
     CLOTHES,
+    LEGS,
     PANTS,
     PARTS_COUNT
 };
