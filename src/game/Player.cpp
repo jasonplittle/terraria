@@ -15,18 +15,22 @@ Player::Player()
     m_sprites[PlayerPart::HEAD] = std::make_unique<Sprite>("resources/Player_0_0.png", spriteSize, IVec2{0, 0});
     m_sprites[PlayerPart::EYEWHITE] = std::make_unique<Sprite>("resources/Player_0_1.png", spriteSize, IVec2{0, 0});
     m_sprites[PlayerPart::EYE] = std::make_unique<Sprite>("resources/Player_0_2.png", spriteSize, IVec2{0, 0});
+    m_sprites[PlayerPart::HAIR] = std::make_unique<Sprite>("resources/playerHair/Player_Hair_1.png", spriteSize, IVec2{0, 0});
+    m_sprites[PlayerPart::LEFT_ARM] = std::make_unique<Sprite>("resources/Player_0_7.png", spriteSize, IVec2{2, 3});
     m_sprites[PlayerPart::TORSO] = std::make_unique<Sprite>("resources/Player_0_3.png", spriteSize, IVec2{0, 0});
-    m_sprites[PlayerPart::RIGHT_ARM] = std::make_unique<Sprite>("resources/Player_0_7.png", spriteSize, IVec2{2, 0});
+    m_sprites[PlayerPart::RIGHT_ARM] = std::make_unique<Sprite>("resources/Player_0_7.png", spriteSize, IVec2{2, 1});
     m_sprites[PlayerPart::LEGS] = std::make_unique<Sprite>("resources/Player_0_10.png", spriteSize, IVec2{0, 0});
     m_sprites[PlayerPart::CLOTHES] = std::make_unique<Sprite>("resources/Player_0_6.png", spriteSize, IVec2{0, 0});
     m_sprites[PlayerPart::PANTS] = std::make_unique<Sprite>("resources/Player_0_11.png", spriteSize, IVec2{0, 0});
 
     m_sprites[PlayerPart::EYE]->SetColor(eyeColor);
+    m_sprites[PlayerPart::HAIR]->SetColor(hairColor);
     m_sprites[PlayerPart::HEAD]->SetColor(skinColor);
     m_sprites[PlayerPart::LEGS]->SetColor(skinColor);
+    m_sprites[PlayerPart::LEFT_ARM]->SetColor(skinColor);
     m_sprites[PlayerPart::RIGHT_ARM]->SetColor(skinColor);
     m_sprites[PlayerPart::CLOTHES]->SetColor(clothesColor);
-    m_sprites[PlayerPart::PANTS]->SetColor(pantsColor);
+    // m_sprites[PlayerPart::PANTS]->SetColor(pantsColor);
 
 }
 
@@ -45,3 +49,70 @@ void Player::UpdatePosition(float dx, float dy)
         m_isMovingRight = false;
     }
 }
+
+void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight)
+{
+    m_isInAir = false;
+
+    if (isMovingUp)
+    {
+        m_playerPosition.y += m_velocity * deltaTime;
+        m_isInAir = true;
+    }
+    else if (isMovingDown)
+    {
+        m_playerPosition.y -= m_velocity * deltaTime;
+        m_isInAir = true;
+    }
+
+    if (isMovingLeft)
+    {
+        m_playerPosition.x -= m_velocity * deltaTime;
+        m_isMovingRight = false;
+    }
+    else if (isMovingRight)
+    {
+        m_playerPosition.x += m_velocity * deltaTime;
+        m_isMovingRight = true;
+    }
+    
+
+    if (m_isInAir)
+    {
+        m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 3});
+        m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 1});
+    }
+    else
+    {
+        // todo select correct animation frame
+        m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 2});
+        m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 0});
+    }
+
+
+    if (isMovingLeft || isMovingRight)
+    {
+        m_animTimer += deltaTime;
+
+        if (m_animTimer >= m_animSpeed)
+        {
+            m_animTimer -= m_animSpeed;
+            m_animframe++;
+            m_animframe %= 14;
+            // m_animframe %= 5;
+
+            m_sprites[PlayerPart::HAIR]->SetAtlasPosition(IVec2{0, m_animframe});
+            m_sprites[PlayerPart::PANTS]->SetAtlasPosition(IVec2{0, m_animframe});
+            m_sprites[PlayerPart::LEGS]->SetAtlasPosition(IVec2{0, m_animframe});
+
+            // m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(runningArmAnimFrames[m_animframe]);
+        }
+    }
+
+
+
+
+
+
+}
+

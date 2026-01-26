@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -56,27 +57,46 @@ int main()
     Player player = Player();
     PlayerRenderer playerRenderer = PlayerRenderer();
 
+    float lastTime = glfwGetTime();
+    float currentTime;
+    float dt;
+
+    bool isMovingUp = false;
+    bool isMovingDown = false;
+    bool isMovingLeft = false;
+    bool isMovingRight = false;
+
     while (!glfwWindowShouldClose(window))
     {
         renderer.Clear();
 
+        isMovingUp = false;
+        isMovingDown = false;
+        isMovingLeft = false;
+        isMovingRight = false;
+
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_UP))
         {
-            player.UpdatePosition(0.0f, 5.0f);
+            isMovingUp = true;
         }
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_DOWN))
         {
-            player.UpdatePosition(0.0f, -5.0f);
+            isMovingDown = true;
         }
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_LEFT))
         {
-            player.UpdatePosition(-5.0f, 0.0f);
+            isMovingLeft = true;
         }
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_RIGHT))
         {
-            player.UpdatePosition(5.0f, 0.0f);
+            isMovingRight = true;
         }
-        
+
+        currentTime = glfwGetTime();
+        dt = currentTime - lastTime;
+        lastTime = currentTime;
+
+        player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight);
         playerRenderer.Render(player);
 
         glfwSwapBuffers(window);
