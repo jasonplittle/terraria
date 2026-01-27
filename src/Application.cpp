@@ -16,6 +16,9 @@
 #include "Player.hpp"
 #include "PlayerRenderer.hpp"
 
+#include "World.hpp"
+#include "WorldRenderer.hpp"
+
 
 
 
@@ -56,6 +59,9 @@ int main()
 
     Player player = Player();
     PlayerRenderer playerRenderer = PlayerRenderer();
+
+    World world = World();
+    world.GenerateChunk();
 
     float lastTime = glfwGetTime();
     float currentTime;

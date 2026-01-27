@@ -15,6 +15,10 @@ add_executable("${CMAKE_PROJECT_NAME}"
     ${CMAKE_SOURCE_DIR}/src/game/Player.cpp
     ${CMAKE_SOURCE_DIR}/src/game/Sprite.cpp
     ${CMAKE_SOURCE_DIR}/src/game/PlayerRenderer.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/WorldRenderer.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/World.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/Tile.cpp
+
 
     ${CMAKE_SOURCE_DIR}/src/renderer/Renderer.cpp 
     ${CMAKE_SOURCE_DIR}/src/renderer/IndexBuffer.cpp 
@@ -44,6 +48,7 @@ target_include_directories("${CMAKE_PROJECT_NAME}"
         ${CMAKE_SOURCE_DIR}/thirdparty/stb_image
         ${CMAKE_SOURCE_DIR}/thirdparty/glm-1.0.3
         ${CMAKE_SOURCE_DIR}/thirdparty/imgui-1.92.5
+        ${CMAKE_SOURCE_DIR}/thirdparty/FastNoiseLite
 )
 
 if(WIN32)
