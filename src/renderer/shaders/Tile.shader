@@ -24,6 +24,7 @@ uniform sampler2D u_Atlas;
 
 void main()
 {
-    FragColor = texture(u_Atlas, vUV) + vec4(1.0, 1.0, 1.0, 1.0);
-    // FragColor = texture(u_Atlas, vUV);
+    // FragColor = vec4(vUV, 1.0, 1.0);
+    // FragColor = texture(u_Atlas, vUV) + vec4(1.0, 1.0, 1.0, 1.0);
+    FragColor = texture(u_Atlas, vUV);
 }

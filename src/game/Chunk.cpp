@@ -73,7 +73,7 @@ void Chunk::generateTileMesh()
 
     layout.Push<float>(2);
     layout.Push<float>(2);
-    // layout.Push<float>(2); // texture index
+    // layout.Push<float>(1); // texture index
     m_vertexArray->AddBuffer(*m_vertexBuffer, layout);
     m_vertexArray->SetVertexCount(vertices.size());
 }

@@ -51,11 +51,11 @@ private:
     void generateTileMap();
     void generateTileMesh();
 
-    UVRect GetTileUV(Tile tile)
+    inline UVRect GetTileUV(Tile tile)
     {
         switch (tile)
         {
-            case STONE: return {0.0f, 0.0f, 16.0f, 16.0f};
+            case STONE: return {0.0f, 0.9926296f, 0.05556f, 1.0f};
             // case DIRT:  return {0.25f, 0.0f, 0.5f, 0.25f};
             // case STONE: return {0.5f, 0.0f, 0.75f, 0.25f};
             default:    return {0, 0, 0, 0};
@@ -76,13 +76,13 @@ private:
                     float x1, float y1,
                     const UVRect& uv)
     {
-        verts.push_back({x0, y0, uv.u0, uv.v1});
-        verts.push_back({x1, y0, uv.u1, uv.v1});
-        verts.push_back({x1, y1, uv.u1, uv.v0});
+        verts.push_back({x0, y0, uv.u0, uv.v1}); // Bottom left
+        verts.push_back({x1, y0, uv.u1, uv.v1}); // Bottom right
+        verts.push_back({x1, y1, uv.u1, uv.v0}); // Top right
 
-        verts.push_back({x0, y0, uv.u0, uv.v1});
-        verts.push_back({x1, y1, uv.u1, uv.v0});
-        verts.push_back({x0, y1, uv.u0, uv.v0});
+        verts.push_back({x0, y0, uv.u0, uv.v1}); // Bottom left
+        verts.push_back({x1, y1, uv.u1, uv.v0}); // Top right
+        verts.push_back({x0, y1, uv.u0, uv.v0}); // Top left
     }
 
     int chunkX = 0; // chunk coordinate in world X
