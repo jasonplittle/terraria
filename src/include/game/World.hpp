@@ -1,46 +1,20 @@
 #pragma once
 
-#include <array>
+#include "Chunk.hpp"
 
 #include "UtilLib.hpp"
 
-#include "Tile.hpp"
 
-
-constexpr int CHUNK_WIDTH  = 32;
-constexpr int CHUNK_HEIGHT = 32; // tall world
-
-
-// class Chunk
-// {
-// public:
-//     Chunk(std::array<Tile, CHUNK_WIDTH * CHUNK_HEIGHT> ) : ;
-
-// private:
-//     std::array<Tile, CHUNK_WIDTH * CHUNK_HEIGHT> m_tileMap;
-// };
 
 class World
 {
 public:
-    World();
+    World() = default;
 
-    void GenerateChunk();
-
-    const std::array<Tile, CHUNK_WIDTH * CHUNK_HEIGHT> GetTileMap() const { return m_tileMap; }
+    const Chunk& GetChunk() const { return chunk; }
 
 private:
-    IVec2 currentChunkIndex = { 0, 0 };
-
-    // std::vector<Chunk> chunks
-
-    std::array<Tile, CHUNK_WIDTH * CHUNK_HEIGHT> m_tileMap;
-
-
-
-
-    // current chunk
-
+    Chunk chunk;
 
 
 };

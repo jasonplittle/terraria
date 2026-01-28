@@ -17,7 +17,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     ${CMAKE_SOURCE_DIR}/src/game/PlayerRenderer.cpp
     ${CMAKE_SOURCE_DIR}/src/game/WorldRenderer.cpp
     ${CMAKE_SOURCE_DIR}/src/game/World.cpp
-    ${CMAKE_SOURCE_DIR}/src/game/Tile.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/Chunk.cpp
 
 
     ${CMAKE_SOURCE_DIR}/src/renderer/Renderer.cpp 

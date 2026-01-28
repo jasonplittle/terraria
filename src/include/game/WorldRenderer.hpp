@@ -18,13 +18,12 @@ class WorldRenderer
 {
 public:
     WorldRenderer();
-    void Render(const World& world);
+    void Render(const World& world, Vec2 screenSize);
 
 private:
     std::unique_ptr<Texture> m_texture;
     std::unique_ptr<Shader> m_shader;
+
+    bool m_worldNeedsRendering = true;
     
-    std::unique_ptr<VertexArray> m_vertexArray;
-    std::unique_ptr<IndexBuffer> m_indexBuffer;
-    std::unique_ptr<VertexBuffer> m_vertexBuffer;
 };

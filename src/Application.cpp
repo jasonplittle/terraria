@@ -59,9 +59,9 @@ int main()
 
     Player player = Player();
     PlayerRenderer playerRenderer = PlayerRenderer();
+    WorldRenderer worldRenderer = WorldRenderer();
 
     World world = World();
-    world.GenerateChunk();
 
     float lastTime = glfwGetTime();
     float currentTime;
@@ -71,6 +71,8 @@ int main()
     bool isMovingDown = false;
     bool isMovingLeft = false;
     bool isMovingRight = false;
+
+    int width, height;
 
     while (!glfwWindowShouldClose(window))
     {
@@ -102,8 +104,12 @@ int main()
         dt = currentTime - lastTime;
         lastTime = currentTime;
 
+        glfwGetWindowSize(window, &width, &height);
+
+        worldRenderer.Render(world, {(float)width, (float)height});
+
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight);
-        playerRenderer.Render(player, {1280.0f, 720.0f});
+        playerRenderer.Render(player, {(float)width, (float)height});
 
         glfwSwapBuffers(window);
 		glfwPollEvents();

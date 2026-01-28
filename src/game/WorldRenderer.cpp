@@ -3,44 +3,32 @@
 
 WorldRenderer::WorldRenderer()
 {
-    unsigned int indicies[] = {
-        0, 1, 2,
-        2, 3, 0,
-    };
-
-    float verticies[] = {
-        -0.5f, -0.5f, 0.0f, 0.0f,
-         0.5f, -0.5f, 1.0f, 0.0f,
-         0.5f,  0.5f, 1.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f, 1.0f
-    };
-
-    m_shader = std::make_unique<Shader>("src/renderer/shaders/Texture.shader");
+    m_shader = std::make_unique<Shader>("src/renderer/shaders/Tile.shader");
     m_texture = std::make_unique<Texture>("resources/Tiles_1.png");
 
-
-    m_vertexArray = std::make_unique<VertexArray>();
-    m_indexBuffer = std::make_unique<IndexBuffer>(indicies, 6);
-    m_vertexBuffer = std::make_unique<VertexBuffer>(verticies, 4 * 4 * sizeof(float));
-
-    VertexBufferLayout layout;
-
-    layout.Push<float>(2);
-    layout.Push<float>(2);
-    m_vertexArray->AddBuffer(*m_vertexBuffer, layout);
 }
 
 
-void WorldRenderer::Render(const World& world)
+
+void WorldRenderer::Render(const World& world, Vec2 screenSize)
 {
-    for (const auto& tile : world.GetTileMap())
-    {
+    Renderer renderer;
 
-        // If tile is air/
-        // Find uv
-        // Generate one large vb?
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0));
 
-    }
+    glm::mat4 projection = glm::ortho(0.0f, screenSize.x, 0.0f, screenSize.y, -1.0f, 1.0f);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+    
+    glm::mat4 mvp = projection * view * model;
 
+    m_shader->Bind();
+    m_texture->Bind();
+    m_shader->SetUniform1i("u_Atlas", 0);
+    m_shader->SetUniformMat4f("u_MVP", mvp);
+
+    renderer.Draw(world.GetChunk().GetVertexArray(), *m_shader);
 }
+
+
+
 
