@@ -7,9 +7,21 @@
 #include "VertexArray.hpp"
 
 constexpr int CHUNK_WIDTH  = 32;
-constexpr int CHUNK_HEIGHT = 32; // tall world
+constexpr int CHUNK_HEIGHT = 128; // tall world
 
-constexpr int TILE_SIZE    = 16;
+constexpr float TILE_SIZE    = 16.0f;
+
+constexpr float ATLAS_W = 288.0f;
+constexpr float ATLAS_H = 277.0f;
+
+constexpr float U = TILE_SIZE / ATLAS_W;
+constexpr float V = 1.0f - (TILE_SIZE / ATLAS_H);
+
+
+// constexpr float U1 = (1.0f / 288.0f) * 16.0f;
+// constexpr float V = ((1.0f / 277.0f) * 16.0f);
+// constexpr float V0 = 1.0f - (V * 6.0f);
+// constexpr float V1 = V0 + V;
 
 constexpr int Index(int x, int y)
 {
@@ -55,7 +67,7 @@ private:
     {
         switch (tile)
         {
-            case STONE: return {0.0f, 0.9926296f, 0.05556f, 1.0f};
+            case STONE: return {0.0f, V, U, 1.0f};
             // case DIRT:  return {0.25f, 0.0f, 0.5f, 0.25f};
             // case STONE: return {0.5f, 0.0f, 0.75f, 0.25f};
             default:    return {0, 0, 0, 0};

@@ -47,11 +47,11 @@ private:
     Vec2 m_playerSize = {100.0f, 150.0f};
 
     bool m_isMovingRight = true;
-    bool m_isInAir = true;
+    bool m_isInAir = false;
 
     std::array<std::unique_ptr<Sprite>, PlayerPart::PARTS_COUNT> m_sprites;
 
-    float m_velocity = 500.f;
+    Vec2 m_vel = { 100.f, 0.0f };
 
     float m_animSpeed = 0.08;
     float m_animTimer = 0.0;

@@ -13,12 +13,13 @@
 #include "UtilLib.hpp"
 
 #include "World.hpp"
+#include "Player.hpp"
 
 class WorldRenderer
 {
 public:
     WorldRenderer();
-    void Render(const World& world, Vec2 screenSize);
+    void Render(const World& world, const Player& player, Vec2 screenSize);
 
 private:
     std::unique_ptr<Texture> m_texture;

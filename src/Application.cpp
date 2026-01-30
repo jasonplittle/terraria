@@ -74,6 +74,9 @@ int main()
 
     int width, height;
 
+    float VIRTUAL_WIDTH  = 1280.0f;
+    float VIRTUAL_HEIGHT = 720.0f;
+
     while (!glfwWindowShouldClose(window))
     {
         renderer.Clear();
@@ -105,11 +108,12 @@ int main()
         lastTime = currentTime;
 
         glfwGetWindowSize(window, &width, &height);
+        renderer.Viewport(width, height);
 
-        worldRenderer.Render(world, {(float)width, (float)height});
+        worldRenderer.Render(world, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight);
-        playerRenderer.Render(player, {(float)width, (float)height});
+        playerRenderer.Render(player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
         glfwSwapBuffers(window);
 		glfwPollEvents();

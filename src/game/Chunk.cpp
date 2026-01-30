@@ -19,7 +19,7 @@ void Chunk::generateTileMap()
 {
     FastNoiseLite noise;
     noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-    noise.SetFrequency(0.02f);
+    noise.SetFrequency(0.1f);
 
     for (int y = 0; y < CHUNK_HEIGHT; y++)
     {

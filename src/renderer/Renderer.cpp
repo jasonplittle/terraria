@@ -28,3 +28,8 @@ void Renderer::EnableBlending() const
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 }
+
+void Renderer::Viewport(int width, int height) const
+{
+    GLCall(glViewport(0, 0, width, height));
+}
