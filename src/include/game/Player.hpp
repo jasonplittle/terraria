@@ -50,11 +50,11 @@ private:
     Vec2 m_collideRadii = {10.0f, 30.0f}; // x starts middle, y starts bottom
 
     bool m_isMovingRight = true;
-    bool m_isInAir = false;
+    bool m_isInAir = true;
 
     std::array<std::unique_ptr<Sprite>, PlayerPart::PARTS_COUNT> m_sprites;
 
-    Vec2 m_vel = { 100.f, 0.0f };
+    Vec2 m_vel = { 0.f, 0.f };
 
     float m_velocity = 100.f;
 

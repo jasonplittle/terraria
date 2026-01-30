@@ -52,187 +52,216 @@ void Player::UpdatePosition(float dx, float dy)
     }
 }
 
-int GRAVITY = -1800.0f;
-float JUMP_VELOCITY = 650.0f;
-
-// void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world)
-// {
-//     if (m_isInAir)
-//     {
-//         m_vel.y += GRAVITY * deltaTime;
-//     }
-//     else
-//     {
-//         m_vel.y = 0.0f;
-//     }
-
-//     m_playerPosition.y += m_vel.y * deltaTime;
-
-//     if (isMovingLeft)
-//     {
-//         m_playerPosition.x -= m_vel.x * deltaTime;
-//         m_isMovingRight = false;
-//     }
-//     else if (isMovingRight)
-//     {
-//         m_playerPosition.x += m_vel.x * deltaTime;
-//         m_isMovingRight = true;
-//     }
-
-//     if (isMovingUp && !m_isInAir)
-//     {
-//         m_vel.y = JUMP_VELOCITY;
-//         m_isInAir = true;
-//     }
-
-//     if (world.IsSolid(m_playerPosition.x, m_playerPosition.y))
-//     {
-//         m_isInAir = false;
-//     }
-
-//     // if (m_vel.y < 0)
-//     // {
-//         // m_isInAir = false;
-//     // }
-
-// }
-
-// void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world)
-// {
-//     m_isInAir = false;
-
-//     if (isMovingUp)
-//     {
-//         bool collideTop = world.IsSolid(m_playerPosition.x, m_playerPosition.y + m_playerSize.y);
-//         if (!collideTop)
-//         {
-//             m_playerPosition.y += m_velocity * deltaTime;
-//         }
-        
-//         m_isInAir = true;
-//     }
-//     else if (isMovingDown)
-//     {
-//         bool collideBottom = world.IsSolid(m_playerPosition.x, m_playerPosition.y);
-//         if (!collideBottom)
-//         {
-//             m_playerPosition.y -= m_velocity * deltaTime;
-//         }
-
-//         m_isInAir = true;
-//     }
-
-//     if (isMovingLeft)
-//     {
-//         bool collideLeft = world.IsSolid(m_playerPosition.x, m_playerPosition.y);
-//         if (!collideLeft)
-//         {
-//             m_playerPosition.x -= m_velocity * deltaTime;
-//         }
-//         m_isMovingRight = false;
-        
-//     }
-//     else if (isMovingRight)
-//     {
-//         bool collideRight = world.IsSolid(m_playerPosition.x + m_playerSize.x, m_playerPosition.y);
-//         if (!collideRight)
-//         {
-//             m_playerPosition.x += m_velocity * deltaTime;
-//         }
-//         m_isMovingRight = true;
-//     }
-    
-
-//     if (m_isInAir)
-//     {
-//         m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 3});
-//         m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 1});
-//     }
-//     else
-//     {
-//         // todo select correct animation frame
-//         m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 2});
-//         m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 0});
-//     }
-
-
-//     if (isMovingLeft || isMovingRight)
-//     {
-//         m_animTimer += deltaTime;
-
-//         if (m_animTimer >= m_animSpeed)
-//         {
-//             m_animTimer -= m_animSpeed;
-//             m_animframe++;
-//             m_animframe %= 14;
-//             // m_animframe %= 5;
-
-//             m_sprites[PlayerPart::HAIR]->SetAtlasPosition(IVec2{0, m_animframe});
-//             m_sprites[PlayerPart::PANTS]->SetAtlasPosition(IVec2{0, m_animframe});
-//             m_sprites[PlayerPart::LEGS]->SetAtlasPosition(IVec2{0, m_animframe});
-
-//             // m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(runningArmAnimFrames[m_animframe]);
-//         }
-//     }
-
-
-
-//     // if (world.IsSolid(m_playerPosition.x, m_playerPosition.y))
-//     // {
-//         // m_isInAir = false;
-//     // }
-
-
-// }
 
 float padding = 1.0f;
 
-void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world)
+int GRAVITY = -1800.0f;
+float JUMP_VELOCITY = 650.0f;
+
+inline int worldToTile(float world)
 {
-    m_isInAir = false;
+    return (int)std::floor(world / TILE_SIZE);
+}
 
-    if (isMovingUp)
+void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world)
+{    
+    // bool collideBottom = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y);
+    // bool collideTop = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y + m_collideRadii.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y + m_collideRadii.y);
+    // bool collideLeft = world.IsSolid(m_playerPosition.x - m_collideRadii.x, m_playerPosition.y + padding) || world.IsSolid(m_playerPosition.x - m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
+    // bool collideRight = world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + padding) || world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
+
+
+    if (isMovingUp && !m_isInAir)
     {
-        // Left bound to right bound
-        bool collideTop = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y + m_collideRadii.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y + m_collideRadii.y);
-        if (!collideTop)
-        {
-            m_playerPosition.y += m_velocity * deltaTime;
-        }
-        
+        m_vel.y = JUMP_VELOCITY;
         m_isInAir = true;
     }
-    else if (isMovingDown)
-    {
-        bool collideBottom = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y);
-        if (!collideBottom)
-        {
-            m_playerPosition.y -= m_velocity * deltaTime;
-        }
 
-        m_isInAir = true;
-    }
+    m_isInAir = true;
+    m_vel.y += GRAVITY * deltaTime;
 
     if (isMovingLeft)
     {
-        bool collideLeft = world.IsSolid(m_playerPosition.x - m_collideRadii.x, m_playerPosition.y + padding) || world.IsSolid(m_playerPosition.x - m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
-        if (!collideLeft)
-        {
-            m_playerPosition.x -= m_velocity * deltaTime;
-        }
+        m_vel.x = -m_velocity;
         m_isMovingRight = false;
     }
-    else if (isMovingRight)
+
+    if (isMovingRight)
     {
-        bool collideRight = world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + padding) || world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
-        if (!collideRight)
-        {
-            m_playerPosition.x += m_velocity * deltaTime;
-        }
+        m_vel.x = m_velocity;
         m_isMovingRight = true;
     }
+
+    if (!isMovingLeft && !isMovingRight)
+    {
+        m_vel.x = 0;
+    }
+
+
+
+    m_playerPosition.x += m_vel.x * deltaTime;
+
+    int left = worldToTile(m_playerPosition.x - m_collideRadii.x);
+    int right = worldToTile(m_playerPosition.x + m_collideRadii.x);
+    int top = worldToTile(m_playerPosition.y + m_collideRadii.y);
+    int bottom = worldToTile(m_playerPosition.y);
+
+
+    for (int y = bottom; y <= top; y++)
+    {
+        for (int x = left; x <= right; x++)
+        {
+            if (!world.IsSolid(x, y)) continue;
+
+            float tileLeft  = x * TILE_SIZE;
+            float tileRight = tileLeft + TILE_SIZE;
+
+            if (m_vel.x > 0.0f)
+            {
+                std::cout << "Collide player right: " << tileLeft << " " << m_playerPosition.x << std::endl;
+
+                // m_playerPosition.x = tileLeft - m_collideRadii.x;
+                m_vel.x = 0.0f;
+            }
+            else if (m_vel.x < 0.0f)
+            {
+                std::cout << "Collide player left: " << tileRight << " " << m_playerPosition.x << std::endl;
+
+                // m_playerPosition.x = tileRight + m_collideRadii.x;
+                m_vel.x = 0.0f;
+            }
+
+            
+        }
+    }
+
+
+    m_playerPosition.y += m_vel.y * deltaTime;
+
+    left = worldToTile(m_playerPosition.x - m_collideRadii.x);
+    right = worldToTile(m_playerPosition.x + m_collideRadii.x);
+    top = worldToTile(m_playerPosition.y + m_collideRadii.y);
+    bottom = worldToTile(m_playerPosition.y);
+
+
+    for (int y = bottom; y <= top; y++)
+    {
+        for (int x = left; x <= right; x++)
+        {
+            if (!world.IsSolid(x, y)) continue;
+
+            float tileBottom  = y * TILE_SIZE;
+            float tileTop = tileBottom + TILE_SIZE;
+
+            if (m_vel.y > 0.0f)
+            {
+                // m_playerPosition.y = tileBottom - m_collideRadii.y;
+                m_vel.y = 0.0f;
+
+            }
+            else if (m_vel.y < 0.0f)
+            {
+                // m_playerPosition.y = tileTop;
+                m_vel.y = 0.0f;
+                m_isInAir = false;
+            }
+
+            
+        }
+    }
+
+
+
+
+    // int minX = floor(left   / TILE_SIZE);
+    // int maxX = floor(right  / TILE_SIZE);
+    // int minY = floor(bottom / TILE_SIZE);
+    // int maxY = floor(top    / TILE_SIZE);
+
     
 
+    // for (int y = minY; y <= maxY; y++) {
+    //     for (int x = minX; x <= maxX; x++) {
+    //         if (!world.IsSolid(x, y)) continue;
+
+    //         if (right > x && left < x + TILE_SIZE && top > y && bottom < y + TILE_SIZE)
+    //         {
+    //             m_playerPosition.x -= m_vel.x * deltaTime;
+    //         }
+    //     }
+    // }
+
+    // m_playerPosition.y += m_vel.y * deltaTime;
+
+    // for (int y = minY; y <= maxY; y++) {
+    //     for (int x = minX; x <= maxX; x++) {
+    //         if (!world.IsSolid(x, y)) continue;
+
+    //         if (right > x && left < x + TILE_SIZE && top > y && bottom < y + TILE_SIZE)
+    //         {
+    //             m_playerPosition.y -= m_vel.y * deltaTime;
+    //         }
+    //     }
+    // }
+
+
+    // bool collideLeft = world.IsSolid(left) || world.IsSolid(m_playerPosition.x - m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
+    // bool collideRight = world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + padding) || world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
+    // bool collideTop = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y + m_collideRadii.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y + m_collideRadii.y);
+    // bool collideBottom = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y);
+    
+    
+
+
+
+    // m_playerPosition.y += m_vel.y * deltaTime;
+    // // m_vel.y += GRAVITY * deltaTime;
+
+    // if (collideBottom)
+    // {
+    //     m_vel.y = 0;
+    //     m_isInAir = false;
+    // }
+    // if (isMovingUp && !m_isInAir)
+    // {
+    //     m_vel.y = JUMP_VELOCITY;
+    //     m_isInAir = true;
+    // }
+    // if (collideTop)
+    // {
+    //     m_vel.y = 0;
+    // }
+
+    // // if (collideRight || collideRight)
+    // // {
+    // //     m_vel.x = 0;
+    // // }
+
+    // if (isMovingLeft)
+    // {
+    //     if (!collideLeft)
+    //     {
+    //         // m_vel.x = -m_velocity; // Change to accel, clamp to max speed
+    //         m_playerPosition.x -= m_vel.x * deltaTime;
+    //     }
+    //     m_isMovingRight = false;
+    // }
+
+    // // std::cout << "Left: " << std::boolalpha << collideLeft ;
+
+
+    // if (isMovingRight)
+    // {
+    //     if (!collideRight)
+    //     {
+    //         // m_vel.x = m_velocity; // Change to accel, clamp to max speed
+
+    //         m_playerPosition.x += m_vel.x * deltaTime;
+    //     }
+    //     m_isMovingRight = true;
+    // }
+
+    
     if (m_isInAir)
     {
         m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 3});
@@ -264,6 +293,7 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
             // m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(runningArmAnimFrames[m_animframe]);
         }
     }
+
 
 
 
