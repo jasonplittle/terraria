@@ -35,8 +35,15 @@ void PlayerRenderer::Render(const Player& player, Vec2 screenSize)
 
     Vec2 playerPostion = player.GetPlayerPosition();
 
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(screenSize.x * 0.5f, screenSize.y * 0.5f, 0.0));
-    model = glm::scale(model, glm::vec3(64.0f, 64.0f, 0.0f));
+    // glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(screenSize.x * 0.5f, screenSize.y * 0.5f, 0.0));
+    // model = glm::scale(model, glm::vec3(64.0f, 64.0f, 0.0f));
+
+    // glm::mat4 projection = glm::ortho(0.0f, screenSize.x, 0.0f, screenSize.y, -1.0f, 1.0f);
+    // glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
+
+
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(playerPostion.x, playerPostion.y, 0.0));
+    model = glm::scale(model, glm::vec3(player.GetPlayerSize().x, player.GetPlayerSize().y, 0.0f));
 
     glm::mat4 projection = glm::ortho(0.0f, screenSize.x, 0.0f, screenSize.y, -1.0f, 1.0f);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));

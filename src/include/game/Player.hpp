@@ -9,6 +9,8 @@
 
 #include "UtilLib.hpp"
 
+#include "World.hpp"
+
 enum PlayerPart
 {
     HEAD,
@@ -40,11 +42,11 @@ public:
     Vec2 GetPlayerSize() const { return m_playerSize; }
     Vec2 GetPlayerPosition() const { return m_playerPosition; }
     bool IsMovingRight() const { return m_isMovingRight; }
-    void Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight);
+    void Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world);
 
 private:
-    Vec2 m_playerPosition = {0.0f, 0.0f};
-    Vec2 m_playerSize = {100.0f, 150.0f};
+    Vec2 m_playerPosition = {200.f, 200.f};
+    Vec2 m_playerSize = {16.0f, 16.0f};
 
     bool m_isMovingRight = true;
     bool m_isInAir = false;
@@ -52,6 +54,8 @@ private:
     std::array<std::unique_ptr<Sprite>, PlayerPart::PARTS_COUNT> m_sprites;
 
     Vec2 m_vel = { 100.f, 0.0f };
+
+    float m_velocity = 100.f;
 
     float m_animSpeed = 0.08;
     float m_animTimer = 0.0;

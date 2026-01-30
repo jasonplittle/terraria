@@ -55,6 +55,15 @@ public:
 
     const VertexArray& GetVertexArray() const { return *m_vertexArray; }
 
+    Tile getTile(int x, int y) const
+    {
+        if (x < 0 || x >= CHUNK_WIDTH ||
+            y < 0 || y >= CHUNK_HEIGHT)
+            return AIR;
+
+        return m_tileMap[y * CHUNK_WIDTH + x];
+    }
+
     // const std::array<Tile, CHUNK_WIDTH * CHUNK_HEIGHT> GetTileMap() const { return m_tileMap; }
 
 private:
@@ -72,15 +81,6 @@ private:
             // case STONE: return {0.5f, 0.0f, 0.75f, 0.25f};
             default:    return {0, 0, 0, 0};
         }
-    }
-
-    inline Tile getTile(int x, int y)
-    {
-        if (x < 0 || x >= CHUNK_WIDTH ||
-            y < 0 || y >= CHUNK_HEIGHT)
-            return AIR;
-
-        return m_tileMap[y * CHUNK_WIDTH + x];
     }
 
     inline void AddQuad(std::vector<Vertex>& verts,

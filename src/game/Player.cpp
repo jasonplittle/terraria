@@ -1,5 +1,7 @@
 #include "Player.hpp"
 
+#include <iostream>
+
 
 Player::Player()
 {
@@ -53,99 +55,124 @@ void Player::UpdatePosition(float dx, float dy)
 int GRAVITY = -1800.0f;
 float JUMP_VELOCITY = 650.0f;
 
-void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight)
-{
-    m_vel.y += GRAVITY * deltaTime;
-
-    m_playerPosition.y += m_vel.y * deltaTime;
-
-    if (isMovingLeft)
-    {
-        m_playerPosition.x -= m_vel.x * deltaTime;
-        m_isMovingRight = false;
-    }
-    else if (isMovingRight)
-    {
-        m_playerPosition.x += m_vel.x * deltaTime;
-        m_isMovingRight = true;
-    }
-
-    if (isMovingUp && !m_isInAir)
-    {
-        m_vel.y = JUMP_VELOCITY;
-        m_isInAir = true;
-    }
-
-    if (m_vel.y < 0)
-    {
-        m_isInAir = false;
-    }
-
-}
-
-// void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight)
+// void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world)
 // {
-//     m_isInAir = false;
+//     if (m_isInAir)
+//     {
+//         m_vel.y += GRAVITY * deltaTime;
+//     }
+//     else
+//     {
+//         m_vel.y = 0.0f;
+//     }
 
-//     if (isMovingUp)
-//     {
-//         m_playerPosition.y += m_velocity * deltaTime;
-//         m_isInAir = true;
-//     }
-//     else if (isMovingDown)
-//     {
-//         m_playerPosition.y -= m_velocity * deltaTime;
-//         m_isInAir = true;
-//     }
+//     m_playerPosition.y += m_vel.y * deltaTime;
 
 //     if (isMovingLeft)
 //     {
-//         m_playerPosition.x -= m_velocity * deltaTime;
+//         m_playerPosition.x -= m_vel.x * deltaTime;
 //         m_isMovingRight = false;
 //     }
 //     else if (isMovingRight)
 //     {
-//         m_playerPosition.x += m_velocity * deltaTime;
+//         m_playerPosition.x += m_vel.x * deltaTime;
 //         m_isMovingRight = true;
 //     }
-    
 
-//     if (m_isInAir)
+//     if (isMovingUp && !m_isInAir)
 //     {
-//         m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 3});
-//         m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 1});
-//     }
-//     else
-//     {
-//         // todo select correct animation frame
-//         m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 2});
-//         m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 0});
+//         m_vel.y = JUMP_VELOCITY;
+//         m_isInAir = true;
 //     }
 
-
-//     if (isMovingLeft || isMovingRight)
+//     if (world.IsSolid(m_playerPosition.x, m_playerPosition.y))
 //     {
-//         m_animTimer += deltaTime;
-
-//         if (m_animTimer >= m_animSpeed)
-//         {
-//             m_animTimer -= m_animSpeed;
-//             m_animframe++;
-//             m_animframe %= 14;
-//             // m_animframe %= 5;
-
-//             m_sprites[PlayerPart::HAIR]->SetAtlasPosition(IVec2{0, m_animframe});
-//             m_sprites[PlayerPart::PANTS]->SetAtlasPosition(IVec2{0, m_animframe});
-//             m_sprites[PlayerPart::LEGS]->SetAtlasPosition(IVec2{0, m_animframe});
-
-//             // m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(runningArmAnimFrames[m_animframe]);
-//         }
+//         m_isInAir = false;
 //     }
 
-
-
-
-
+//     // if (m_vel.y < 0)
+//     // {
+//         // m_isInAir = false;
+//     // }
 
 // }
+
+void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world)
+{
+    m_isInAir = false;
+
+    if (isMovingUp)
+    {
+        bool collideTop = world.IsSolid(m_playerPosition.x, m_playerPosition.y + m_playerSize.y);
+        if (!collideTop)
+        {
+            m_playerPosition.y += m_velocity * deltaTime;
+        }
+        
+        m_isInAir = true;
+    }
+    else if (isMovingDown)
+    {
+        bool collideBottom = world.IsSolid(m_playerPosition.x, m_playerPosition.y);
+        if (!collideBottom)
+        {
+            m_playerPosition.y -= m_velocity * deltaTime;
+        }
+        m_isInAir = true;
+    }
+
+    if (isMovingLeft)
+    {
+        m_playerPosition.x -= m_velocity * deltaTime;
+        m_isMovingRight = false;
+    }
+    else if (isMovingRight)
+    {
+        m_playerPosition.x += m_velocity * deltaTime;
+        m_isMovingRight = true;
+    }
+    
+
+    if (m_isInAir)
+    {
+        m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 3});
+        m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 1});
+    }
+    else
+    {
+        // todo select correct animation frame
+        m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 2});
+        m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 0});
+    }
+
+
+    if (isMovingLeft || isMovingRight)
+    {
+        m_animTimer += deltaTime;
+
+        if (m_animTimer >= m_animSpeed)
+        {
+            m_animTimer -= m_animSpeed;
+            m_animframe++;
+            m_animframe %= 14;
+            // m_animframe %= 5;
+
+            m_sprites[PlayerPart::HAIR]->SetAtlasPosition(IVec2{0, m_animframe});
+            m_sprites[PlayerPart::PANTS]->SetAtlasPosition(IVec2{0, m_animframe});
+            m_sprites[PlayerPart::LEGS]->SetAtlasPosition(IVec2{0, m_animframe});
+
+            // m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(runningArmAnimFrames[m_animframe]);
+        }
+    }
+
+
+
+    if (world.IsSolid(m_playerPosition.x, m_playerPosition.y))
+    {
+        // m_isInAir = false;
+    }
+
+
+}
+
 
