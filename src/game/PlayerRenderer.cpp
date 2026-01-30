@@ -15,11 +15,18 @@ PlayerRenderer::PlayerRenderer()
     //     -0.5f,  0.5f, 0.0f, 1.0f
     // };
 
+    // float verticies[] = {
+    //     0.f, 0.f, 0.0f, 0.0f,
+    //     1.f, 0.f, 1.0f, 0.0f,
+    //     1.f, 1.f, 1.0f, 1.0f,
+    //     0.f, 1.f, 0.0f, 1.0f
+    // };
+
     float verticies[] = {
-        0.f, 0.f, 0.0f, 0.0f,
-        1.f, 0.f, 1.0f, 0.0f,
-        1.f, 1.f, 1.0f, 1.0f,
-        0.f, 1.f, 0.0f, 1.0f
+        -0.5f, 0.f, 0.0f, 0.0f,
+         0.5f, 0.f, 1.0f, 0.0f,
+         0.5f, 1.f, 1.0f, 1.0f,
+        -0.5f, 1.f, 0.0f, 1.0f
     };
 
     m_shader = std::make_unique<Shader>("src/renderer/shaders/Texture.shader");
@@ -40,21 +47,19 @@ void PlayerRenderer::Render(const Player& player, Vec2 screenSize)
 {
     Renderer renderer;
 
-    Vec2 playerPostion = player.GetPlayerPosition();
+    glm::vec2 cameraPos = 
+    {
+        player.GetPlayerPosition().x,
+        player.GetPlayerPosition().y
+    };
 
-    // glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(screenSize.x * 0.5f, screenSize.y * 0.5f, 0.0));
-    // model = glm::scale(model, glm::vec3(64.0f, 64.0f, 0.0f));
+    float zoomX = screenSize.x * 0.5;
+    float zoomY = screenSize.y * 0.5;
 
-    // glm::mat4 projection = glm::ortho(0.0f, screenSize.x, 0.0f, screenSize.y, -1.0f, 1.0f);
-    // glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-
-
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(playerPostion.x, playerPostion.y, 0.0));
+    glm::mat4 projection = glm::ortho(-zoomX, zoomX, -zoomY, zoomY, -1.0f, 1.0f);
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraPos.x, -cameraPos.y, 0));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(player.GetPlayerPosition().x, player.GetPlayerPosition().y, 0.0));
     model = glm::scale(model, glm::vec3(player.GetPlayerSize().x, player.GetPlayerSize().y, 0.0f));
-
-    glm::mat4 projection = glm::ortho(0.0f, screenSize.x, 0.0f, screenSize.y, -1.0f, 1.0f);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 0));
-
     glm::mat4 mvp = projection * view * model;
 
 
