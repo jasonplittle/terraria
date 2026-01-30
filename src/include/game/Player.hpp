@@ -45,8 +45,9 @@ public:
     void Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world);
 
 private:
-    Vec2 m_playerPosition = {200.f, 200.f};
-    Vec2 m_playerSize = {16.0f, 16.0f};
+    // Vec2 m_playerPosition = {200.f, 200.f};
+    Vec2 m_playerPosition = {0.f, 0.f};
+    Vec2 m_playerSize = {32.0f, 32.0f};
 
     bool m_isMovingRight = true;
     bool m_isInAir = false;

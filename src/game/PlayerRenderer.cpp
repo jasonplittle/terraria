@@ -8,11 +8,18 @@ PlayerRenderer::PlayerRenderer()
         2, 3, 0,
     };
 
+    // float verticies[] = {
+    //     -0.5f, -0.5f, 0.0f, 0.0f,
+    //      0.5f, -0.5f, 1.0f, 0.0f,
+    //      0.5f,  0.5f, 1.0f, 1.0f,
+    //     -0.5f,  0.5f, 0.0f, 1.0f
+    // };
+
     float verticies[] = {
-        -0.5f, -0.5f, 0.0f, 0.0f,
-         0.5f, -0.5f, 1.0f, 0.0f,
-         0.5f,  0.5f, 1.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f, 1.0f
+        0.f, 0.f, 0.0f, 0.0f,
+        1.f, 0.f, 1.0f, 0.0f,
+        1.f, 1.f, 1.0f, 1.0f,
+        0.f, 1.f, 0.0f, 1.0f
     };
 
     m_shader = std::make_unique<Shader>("src/renderer/shaders/Texture.shader");

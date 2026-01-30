@@ -13,7 +13,7 @@ public:
 
     const Chunk& GetChunk() const { return chunk; }
 
-    bool IsSolid(int x, int y) const;
+    bool IsSolid(float x, float y) const;
 
 private:
     Chunk chunk;

@@ -118,17 +118,27 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
         {
             m_playerPosition.y -= m_velocity * deltaTime;
         }
+
         m_isInAir = true;
     }
 
     if (isMovingLeft)
     {
-        m_playerPosition.x -= m_velocity * deltaTime;
+        bool collideLeft = world.IsSolid(m_playerPosition.x, m_playerPosition.y);
+        if (!collideLeft)
+        {
+            m_playerPosition.x -= m_velocity * deltaTime;
+        }
         m_isMovingRight = false;
+        
     }
     else if (isMovingRight)
     {
-        m_playerPosition.x += m_velocity * deltaTime;
+        bool collideRight = world.IsSolid(m_playerPosition.x + m_playerSize.x, m_playerPosition.y);
+        if (!collideRight)
+        {
+            m_playerPosition.x += m_velocity * deltaTime;
+        }
         m_isMovingRight = true;
     }
     
@@ -167,12 +177,113 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
 
 
 
-    if (world.IsSolid(m_playerPosition.x, m_playerPosition.y))
-    {
+    // if (world.IsSolid(m_playerPosition.x, m_playerPosition.y))
+    // {
         // m_isInAir = false;
-    }
+    // }
 
 
 }
+
+// inline int worldToTile(float world)
+// {
+//     return (int)std::floor(world / TILE_SIZE);
+// }
+
+// void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world)
+// {
+//     if (isMovingUp)
+//     {
+//         m_vel.y = 100.f;
+//     }
+//     else if (isMovingDown)
+//     {
+//         m_vel.y = -100.f;
+//     }
+
+//     if (isMovingLeft)
+//     {
+//         m_playerPosition.x -= m_velocity * deltaTime;
+//         m_isMovingRight = false;
+//     }
+//     else if (isMovingRight)
+//     {
+//         m_playerPosition.x += m_velocity * deltaTime;
+//         m_isMovingRight = true;
+//     }
+
+
+    
+
+//     int left   = worldToTile(m_playerPosition.x);
+//     int right  = worldToTile(m_playerPosition.x + m_playerSize.x);
+//     int bottom = worldToTile(m_playerPosition.y);
+//     int top    = worldToTile(m_playerPosition.y + m_playerSize.y);
+
+
+//     for (int y = bottom; y <= top; y++)
+//     {
+//         for (int x = left; x <= right; x++)
+//         {
+//             if (!world.IsSolid(x, y)) continue;
+
+//             float tileBottom = y * TILE_SIZE;
+//             float tileTop    = tileBottom + TILE_SIZE;
+
+//             if (m_vel.y > 0.0f)
+//                 m_playerPosition.y = tileBottom - m_playerSize.y;
+//             else if (m_vel.y < 0.0f)
+//                 m_playerPosition.y = tileTop;
+
+//             m_vel.y = 0.0f;
+//         }
+//     }
+
+//     m_playerPosition.y += m_vel.y * deltaTime;
+
+    
+
+//     if (m_isInAir)
+//     {
+//         m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 3});
+//         m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 1});
+//     }
+//     else
+//     {
+//         // todo select correct animation frame
+//         m_sprites[PlayerPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 2});
+//         m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 0});
+//     }
+
+
+//     if (isMovingLeft || isMovingRight)
+//     {
+//         m_animTimer += deltaTime;
+
+//         if (m_animTimer >= m_animSpeed)
+//         {
+//             m_animTimer -= m_animSpeed;
+//             m_animframe++;
+//             m_animframe %= 14;
+//             // m_animframe %= 5;
+
+//             m_sprites[PlayerPart::HAIR]->SetAtlasPosition(IVec2{0, m_animframe});
+//             m_sprites[PlayerPart::PANTS]->SetAtlasPosition(IVec2{0, m_animframe});
+//             m_sprites[PlayerPart::LEGS]->SetAtlasPosition(IVec2{0, m_animframe});
+
+//             // m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(runningArmAnimFrames[m_animframe]);
+//         }
+//     }
+
+
+
+//     // if (world.IsSolid(m_playerPosition.x, m_playerPosition.y))
+//     // {
+//         // m_isInAir = false;
+//     // }
+
+
+// }
+
 
 
