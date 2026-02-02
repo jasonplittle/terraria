@@ -3,7 +3,7 @@
 #include "FastNoiseLite.h"
 
 
-Chunk::Chunk()
+Chunk::Chunk(int chunkX) : m_chunkX(chunkX)
 {
     m_vertexArray = std::make_unique<VertexArray>();
 
@@ -11,22 +11,63 @@ Chunk::Chunk()
     generateTileMesh();
 }
 
+int GetSurfaceHeight(int worldX, const FastNoiseLite& noise)
+{
+    float n = noise.GetNoise((float)worldX, 0.0f); // -1 .. 1
+    n = (n + 1.0f) * 0.5f;                          //  0 .. 1
+
+    constexpr int BASE_HEIGHT = 64;
+    constexpr int AMPLITUDE   = 20;
+
+    return BASE_HEIGHT + int(n * AMPLITUDE);
+}
+
 void Chunk::generateTileMap()
 {
     FastNoiseLite noise;
-    noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-    noise.SetFrequency(0.1f);
+    // noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
+    noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+    noise.SetSeed(1337);
+    noise.SetFrequency(0.01f);
 
-    for (int y = 0; y < CHUNK_HEIGHT; y++)
+    FastNoiseLite caveNoise;
+    caveNoise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+    caveNoise.SetFrequency(0.05f);
+    caveNoise.SetSeed(999);
+
+    for (int x = 0; x < CHUNK_WIDTH; x++)
     {
-        for (int x = 0; x < CHUNK_WIDTH; x++)
-        {
-            float n = noise.GetNoise((float)x, (float)y);
-            n = (n + 1.0f) * 0.5f;
+        int worldX = m_chunkX * CHUNK_WIDTH + x;
+        int surfaceY = GetSurfaceHeight(worldX, noise);
 
-            if (n < 0.3) m_tileMap[y * CHUNK_WIDTH + x] = Tile::STONE;
-            else if (n < 0.6) m_tileMap[y * CHUNK_WIDTH + x] = Tile::DIRT;
-            else m_tileMap[y * CHUNK_WIDTH + x] = Tile::AIR;
+        for (int y = 0; y < CHUNK_HEIGHT; y++)
+        {
+            int worldY = y;
+
+            float cave = caveNoise.GetNoise((float)worldX, (float)worldY);
+
+            Tile tile;
+
+            if (worldY > surfaceY)
+                tile = Tile::AIR;
+            else if (worldY == surfaceY)
+                tile = Tile::DIRT;
+                // tile = Tile::GRASS;
+            else if (worldY >= surfaceY - 5)
+                tile = Tile::DIRT;
+            else if (worldY < surfaceY - 5 && cave > 0.4f)
+                tile = Tile::AIR;
+            else
+                tile = Tile::STONE;
+
+            m_tileMap[y * CHUNK_WIDTH + x] = tile;
+        
+            // float n = noise.GetNoise((float)x, (float)y);
+            // n = (n + 1.0f) * 0.5f;
+
+            // if (n < 0.3) m_tileMap[y * CHUNK_WIDTH + x] = Tile::STONE;
+            // else if (n < 0.6) m_tileMap[y * CHUNK_WIDTH + x] = Tile::DIRT;
+            // else m_tileMap[y * CHUNK_WIDTH + x] = Tile::AIR;
         }
     }
 }
@@ -36,7 +77,7 @@ void Chunk::generateTileMesh()
     std::vector<Vertex> vertices;
     vertices.reserve(20000); // avoid reallocs
 
-    float worldXOffset = chunkX * CHUNK_WIDTH * TILE_SIZE;
+    float worldXOffset = m_chunkX * CHUNK_WIDTH * TILE_SIZE;
 
     for (int y = 0; y < CHUNK_HEIGHT; y++)
     {
@@ -51,6 +92,12 @@ void Chunk::generateTileMesh()
             //     GetTile(chunk, x + 1, y) != AIR &&
             //     GetTile(chunk, x, y - 1) != AIR &&
             //     GetTile(chunk, x, y + 1) != AIR)
+            //     continue;
+
+            // if (m_tileMap[(y * CHUNK_WIDTH) + x - 1] != AIR &&
+            //     m_tileMap[(y * CHUNK_WIDTH) + x + 1] != AIR &&
+            //     m_tileMap[((y - 1) * CHUNK_WIDTH) + x] != AIR &&
+            //     m_tileMap[((y + 1) * CHUNK_WIDTH) + x] != AIR)
             //     continue;
 
             UVRect uv = GetTileUV(tile);

@@ -42,10 +42,11 @@ public:
     Vec2 GetPlayerSize() const { return m_playerSize; }
     Vec2 GetPlayerPosition() const { return m_playerPosition; }
     bool IsMovingRight() const { return m_isMovingRight; }
-    void Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world);
+    void Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world);
+    void UpdateCreative(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world);
 
 private:
-    Vec2 m_playerPosition = {470.f, 1100.f};
+    Vec2 m_playerPosition = {0.f, 1500.f};
     Vec2 m_playerSize = {32.0f, 32.0f};
     Vec2 m_collideRadii = {10.0f, 30.0f}; // x starts middle, y starts bottom
 

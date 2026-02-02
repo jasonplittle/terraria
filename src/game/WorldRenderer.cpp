@@ -10,7 +10,7 @@ WorldRenderer::WorldRenderer()
 }
 
 
-void WorldRenderer::Render(const World& world, const Player& player, Vec2 screenSize)
+void WorldRenderer::Render(World& world, const Player& player, Vec2 screenSize)
 {
     Renderer renderer;
 
@@ -36,7 +36,13 @@ void WorldRenderer::Render(const World& world, const Player& player, Vec2 screen
     m_shader->SetUniform1iv("u_Atlas", 2, samplers);
     m_shader->SetUniformMat4f("u_MVP", mvp);
 
-    renderer.Draw(world.GetChunk(player.GetPlayerPosition().x).GetVertexArray(), *m_shader);
+    static const int LOAD_RADIUS = 3;
+
+    for (int x = -LOAD_RADIUS; x <= LOAD_RADIUS; x++)
+    {
+        renderer.Draw(world.GetChunk(player.GetPlayerPosition().x, x).GetVertexArray(), *m_shader);
+    }
+    
 }
 
 

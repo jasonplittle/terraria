@@ -13,9 +13,9 @@ class World
 public:
     World();
 
-    const Chunk& GetChunk(float worldX) const;
+    const Chunk& GetChunk(float worldX, int offset = 0);
 
-    bool IsSolid(int x, int y) const;
+    bool IsSolid(int x, int y);
 
 private:
     std::map<int, Chunk> m_chunks;

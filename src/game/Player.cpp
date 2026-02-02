@@ -75,7 +75,49 @@ inline bool Intersects(const AABB& a, const AABB& b) {
              a.pos.y >= b.pos.y + b.size.y);
 }
 
-void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world)
+
+void Player::UpdateCreative(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world)
+{
+    int velocity = 200;
+
+    if (isMovingLeft)
+    {
+        m_vel.x = -velocity;
+        m_isMovingRight = false;
+    }
+
+    if (isMovingRight)
+    {
+        m_vel.x = velocity;
+        m_isMovingRight = true;
+    }
+
+    if (isMovingDown)
+    {
+        m_vel.y = -velocity;
+    }
+
+    if (isMovingUp)
+    {
+        m_vel.y = velocity;
+    }
+
+    if (!isMovingLeft && !isMovingRight)
+    {
+        m_vel.x = 0;
+    }
+
+    if (!isMovingUp && !isMovingDown)
+    {
+        m_vel.y = 0;
+    }
+
+    m_playerPosition.x += m_vel.x * deltaTime;
+    m_playerPosition.y += m_vel.y * deltaTime;
+
+}
+
+void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world)
 {    
     // bool collideBottom = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y);
     // bool collideTop = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y + m_collideRadii.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y + m_collideRadii.y);

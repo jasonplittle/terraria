@@ -66,7 +66,7 @@ inline float TileToTexCoord(Tile tile)
 class Chunk
 {
 public:
-    Chunk();
+    Chunk(int chunkX);
 
     const VertexArray& GetVertexArray() const { return *m_vertexArray; }
 
@@ -113,7 +113,7 @@ private:
         verts.push_back({x0, y1, uv.u0, uv.v0, TileToTexCoord(tile)}); // Top left
     }
 
-    int chunkX = 0; // chunk coordinate in world X
+    int m_chunkX = 0; // chunk coordinate in world X
 
     std::array<Tile, CHUNK_WIDTH * CHUNK_HEIGHT> m_tileMap;
 

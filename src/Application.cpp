@@ -112,6 +112,7 @@ int main()
 
         worldRenderer.Render(world, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
+        // player.UpdateCreative(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
         playerRenderer.Render(player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
