@@ -22,7 +22,8 @@ public:
     void Render(const World& world, const Player& player, Vec2 screenSize);
 
 private:
-    std::unique_ptr<Texture> m_texture;
+    std::unique_ptr<Texture> m_textureStone;
+    std::unique_ptr<Texture> m_textureDirt;
     std::unique_ptr<Shader> m_shader;
 
     bool m_worldNeedsRendering = true;

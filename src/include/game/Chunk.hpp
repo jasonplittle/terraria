@@ -38,6 +38,7 @@ struct Vertex
 {
     float x, y;   // world position
     float u, v;   // atlas UV
+    float texCoord;
 };
 
 enum Tile
@@ -47,6 +48,20 @@ enum Tile
     DIRT,
     STONE
 };
+
+inline float TileToTexCoord(Tile tile)
+{
+    switch(tile)
+    {
+        case Tile::STONE:
+            return 0.0f;
+        case Tile::DIRT:
+            return 1.0;
+        default:
+            return 0.0;
+    }
+
+}
 
 class Chunk
 {
@@ -77,6 +92,7 @@ private:
         switch (tile)
         {
             case STONE: return {0.0f, V, U, 1.0f};
+            case DIRT: return {0.0f, V, U, 1.0f};
             // case DIRT:  return {0.25f, 0.0f, 0.5f, 0.25f};
             // case STONE: return {0.5f, 0.0f, 0.75f, 0.25f};
             default:    return {0, 0, 0, 0};
@@ -86,15 +102,15 @@ private:
     inline void AddQuad(std::vector<Vertex>& verts,
                     float x0, float y0,
                     float x1, float y1,
-                    const UVRect& uv)
+                    const UVRect& uv, Tile tile)
     {
-        verts.push_back({x0, y0, uv.u0, uv.v1}); // Bottom left
-        verts.push_back({x1, y0, uv.u1, uv.v1}); // Bottom right
-        verts.push_back({x1, y1, uv.u1, uv.v0}); // Top right
+        verts.push_back({x0, y0, uv.u0, uv.v1, TileToTexCoord(tile)}); // Bottom left
+        verts.push_back({x1, y0, uv.u1, uv.v1, TileToTexCoord(tile)}); // Bottom right
+        verts.push_back({x1, y1, uv.u1, uv.v0, TileToTexCoord(tile)}); // Top right
 
-        verts.push_back({x0, y0, uv.u0, uv.v1}); // Bottom left
-        verts.push_back({x1, y1, uv.u1, uv.v0}); // Top right
-        verts.push_back({x0, y1, uv.u0, uv.v0}); // Top left
+        verts.push_back({x0, y0, uv.u0, uv.v1, TileToTexCoord(tile)}); // Bottom left
+        verts.push_back({x1, y1, uv.u1, uv.v0, TileToTexCoord(tile)}); // Top right
+        verts.push_back({x0, y1, uv.u0, uv.v0, TileToTexCoord(tile)}); // Top left
     }
 
     int chunkX = 0; // chunk coordinate in world X

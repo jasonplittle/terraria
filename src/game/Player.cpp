@@ -129,14 +129,14 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
 
                 if (m_vel.x > 0.0f)
                 {
-                    std::cout << "Collide player right: " << tileLeft << " " << m_playerPosition.x << std::endl;
+                    // std::cout << "Collide player right: " << tileLeft << " " << m_playerPosition.x << std::endl;
 
                     m_playerPosition.x = tileLeft - m_collideRadii.x;
                     m_vel.x = 0.0f;
                 }
                 else if (m_vel.x < 0.0f)
                 {
-                    std::cout << "Collide player left: " << tileRight << " " << m_playerPosition.x << std::endl;
+                    // std::cout << "Collide player left: " << tileRight << " " << m_playerPosition.x << std::endl;
 
                     m_playerPosition.x = tileRight + m_collideRadii.x;
                     m_vel.x = 0.0f;

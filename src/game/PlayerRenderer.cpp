@@ -53,8 +53,8 @@ void PlayerRenderer::Render(const Player& player, Vec2 screenSize)
         player.GetPlayerPosition().y
     };
 
-    float zoomX = screenSize.x * 0.5;
-    float zoomY = screenSize.y * 0.5;
+    float zoomX = screenSize.x * 0.5 * 0.75;
+    float zoomY = screenSize.y * 0.5 * 0.75;
 
     glm::mat4 projection = glm::ortho(-zoomX, zoomX, -zoomY, zoomY, -1.0f, 1.0f);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraPos.x, -cameraPos.y, 0));

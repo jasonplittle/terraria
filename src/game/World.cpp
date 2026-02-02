@@ -4,17 +4,23 @@
 #include <iostream>
 
 
+World::World()
+{
+    m_chunks.try_emplace(0, Chunk());
+}
+
+
 bool World::IsSolid(int x, int y) const
 {
-    int tileX = (int)std::floor(x / TILE_SIZE);
-    int tileY = (int)std::floor(y / TILE_SIZE);
-
-    // int tileX = x / TILE_SIZE;
-    // int tileY = y / TILE_SIZE;
-
-    Tile tile = GetChunk().getTile(x, y);
-
-    // std::cout << "(" << tileX << ", " << tileY << ") - " << "(" << x << ", " << y << ")" << " - " << (tile == Tile::AIR ? "Air" : "Solid") << std::endl;    
-    
+    Tile tile = GetChunk(x).getTile(x, y);
     return tile != AIR;
+}
+
+const Chunk& World::GetChunk(float worldX) const
+{
+    int chunkCoord = (int)std::floor(worldX / TILE_SIZE / CHUNK_WIDTH);
+
+    // std::cout << worldX << " " << chunkCoord << std::endl;
+
+    return m_chunks.at(chunkCoord);
 }

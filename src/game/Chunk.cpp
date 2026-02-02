@@ -3,17 +3,13 @@
 #include "FastNoiseLite.h"
 
 
-
-
 Chunk::Chunk()
 {
-
     m_vertexArray = std::make_unique<VertexArray>();
 
     generateTileMap();
     generateTileMesh();
 }
-
 
 void Chunk::generateTileMap()
 {
@@ -28,7 +24,8 @@ void Chunk::generateTileMap()
             float n = noise.GetNoise((float)x, (float)y);
             n = (n + 1.0f) * 0.5f;
 
-            if (n < 0.5) m_tileMap[y * CHUNK_WIDTH + x] = Tile::STONE;
+            if (n < 0.3) m_tileMap[y * CHUNK_WIDTH + x] = Tile::STONE;
+            else if (n < 0.6) m_tileMap[y * CHUNK_WIDTH + x] = Tile::DIRT;
             else m_tileMap[y * CHUNK_WIDTH + x] = Tile::AIR;
         }
     }
@@ -63,7 +60,7 @@ void Chunk::generateTileMesh()
             float x1 = x0 + TILE_SIZE;
             float y1 = y0 + TILE_SIZE;
 
-            AddQuad(vertices, x0, y0, x1, y1, uv);
+            AddQuad(vertices, x0, y0, x1, y1, uv, tile);
         }
     }
 
@@ -73,7 +70,7 @@ void Chunk::generateTileMesh()
 
     layout.Push<float>(2);
     layout.Push<float>(2);
-    // layout.Push<float>(1); // texture index
+    layout.Push<float>(1);
     m_vertexArray->AddBuffer(*m_vertexBuffer, layout);
     m_vertexArray->SetVertexCount(vertices.size());
 }

@@ -4,19 +4,21 @@
 
 #include "UtilLib.hpp"
 
+#include <map>
+
 
 
 class World
 {
 public:
-    World() = default;
+    World();
 
-    const Chunk& GetChunk() const { return chunk; }
+    const Chunk& GetChunk(float worldX) const;
 
     bool IsSolid(int x, int y) const;
 
 private:
-    Chunk chunk;
+    std::map<int, Chunk> m_chunks;
 
 
 };
