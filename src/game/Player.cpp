@@ -63,6 +63,18 @@ inline int worldToTile(float world)
     return (int)std::floor(world / TILE_SIZE);
 }
 
+struct AABB {
+    glm::vec2 pos;   // bottom-left (or top-left, just be consistent)
+    glm::vec2 size;
+};
+
+inline bool Intersects(const AABB& a, const AABB& b) {
+    return !(a.pos.x + a.size.x <= b.pos.x ||
+             a.pos.x >= b.pos.x + b.size.x ||
+             a.pos.y + a.size.y <= b.pos.y ||
+             a.pos.y >= b.pos.y + b.size.y);
+}
+
 void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, const World& world)
 {    
     // bool collideBottom = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y);
@@ -71,14 +83,7 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
     // bool collideRight = world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + padding) || world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
 
 
-    if (isMovingUp && !m_isInAir)
-    {
-        m_vel.y = JUMP_VELOCITY;
-        m_isInAir = true;
-    }
 
-    m_isInAir = true;
-    m_vel.y += GRAVITY * deltaTime;
 
     if (isMovingLeft)
     {
@@ -107,6 +112,9 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
     int bottom = worldToTile(m_playerPosition.y);
 
 
+    // std::cout << "Player position: " << m_playerPosition.x << ", " << m_playerPosition.y << std::endl;
+
+
     for (int y = bottom; y <= top; y++)
     {
         for (int x = left; x <= right; x++)
@@ -116,24 +124,37 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
             float tileLeft  = x * TILE_SIZE;
             float tileRight = tileLeft + TILE_SIZE;
 
-            if (m_vel.x > 0.0f)
+            if (Intersects({{m_playerPosition.x - m_collideRadii.x, m_playerPosition.y}, {m_collideRadii.x * 2, m_collideRadii.y}}, {{x * TILE_SIZE, y * TILE_SIZE}, {TILE_SIZE, TILE_SIZE}}))
             {
-                std::cout << "Collide player right: " << tileLeft << " " << m_playerPosition.x << std::endl;
 
-                // m_playerPosition.x = tileLeft - m_collideRadii.x;
-                m_vel.x = 0.0f;
-            }
-            else if (m_vel.x < 0.0f)
-            {
-                std::cout << "Collide player left: " << tileRight << " " << m_playerPosition.x << std::endl;
+                if (m_vel.x > 0.0f)
+                {
+                    std::cout << "Collide player right: " << tileLeft << " " << m_playerPosition.x << std::endl;
 
-                // m_playerPosition.x = tileRight + m_collideRadii.x;
-                m_vel.x = 0.0f;
+                    m_playerPosition.x = tileLeft - m_collideRadii.x;
+                    m_vel.x = 0.0f;
+                }
+                else if (m_vel.x < 0.0f)
+                {
+                    std::cout << "Collide player left: " << tileRight << " " << m_playerPosition.x << std::endl;
+
+                    m_playerPosition.x = tileRight + m_collideRadii.x;
+                    m_vel.x = 0.0f;
+                }
             }
 
             
         }
     }
+
+    if (isMovingUp && !m_isInAir)
+    {
+        m_vel.y = JUMP_VELOCITY;
+        m_isInAir = true;
+    }
+
+    m_isInAir = true;
+    m_vel.y += GRAVITY * deltaTime;
 
 
     m_playerPosition.y += m_vel.y * deltaTime;
@@ -153,20 +174,26 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
             float tileBottom  = y * TILE_SIZE;
             float tileTop = tileBottom + TILE_SIZE;
 
-            if (m_vel.y > 0.0f)
+            if (Intersects({{m_playerPosition.x - m_collideRadii.x, m_playerPosition.y}, {m_collideRadii.x * 2, m_collideRadii.y}}, {{x * TILE_SIZE, y * TILE_SIZE}, {TILE_SIZE, TILE_SIZE}}))
             {
-                // m_playerPosition.y = tileBottom - m_collideRadii.y;
-                m_vel.y = 0.0f;
 
-            }
-            else if (m_vel.y < 0.0f)
-            {
-                // m_playerPosition.y = tileTop;
-                m_vel.y = 0.0f;
-                m_isInAir = false;
-            }
+                if (m_vel.y > 0.0f)
+                {
+                    // std::cout << "Collide player top: " << tileBottom << " " << m_playerPosition.y << std::endl;
 
-            
+                    m_playerPosition.y = tileBottom - m_collideRadii.y;
+                    m_vel.y = 0.0f;
+
+                }
+                else if (m_vel.y < 0.0f)
+                {
+                    // std::cout << "Collide player bottom: " << tileTop << " " << m_playerPosition.y << std::endl;
+
+                    m_playerPosition.y = tileTop;
+                    m_vel.y = 0.0f;
+                    m_isInAir = false;
+                }
+            }
         }
     }
 
