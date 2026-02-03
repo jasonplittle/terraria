@@ -12,15 +12,19 @@ World::World()
 }
 
 
-bool World::IsSolid(int x, int y)
+bool World::IsSolid(int worldTileX, int y)
 {
-    Tile tile = GetChunk(x).getTile(x, y);
+
+    // std::cout << worldX << " " << y << std::endl;
+
+    Tile tile = GetChunk(worldTileX * TILE_SIZE).getTileFromWorldTileX(worldTileX, y);
     return tile != AIR;
 }
 
 const Chunk& World::GetChunk(float worldX, int offset)
 {
     int chunkCoord = (int)std::floor(worldX / TILE_SIZE / CHUNK_WIDTH) + offset;
+    std::cout << chunkCoord << std::endl;
 
     if (m_chunks.find(chunkCoord) == m_chunks.end())
     {

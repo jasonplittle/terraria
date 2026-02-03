@@ -6,6 +6,8 @@
 #include "VertexBuffer.hpp"
 #include "VertexArray.hpp"
 
+#include <iostream>
+
 constexpr int CHUNK_WIDTH  = 32;
 constexpr int CHUNK_HEIGHT = 128; // tall world
 
@@ -79,11 +81,22 @@ public:
         return m_tileMap[y * CHUNK_WIDTH + x];
     }
 
+    Tile getTileFromWorldTileX(int worldTileX, int y) const
+    {
+        int x = worldTileX - m_chunkX * CHUNK_WIDTH;
+        // std::cout << m_chunkX << " " << worldTileX << " " << x << std::endl;
+        // int x = worldX % CHUNK_WIDTH;
+
+        if (x < 0 || x >= CHUNK_WIDTH ||
+            y < 0 || y >= CHUNK_HEIGHT)
+            return AIR;
+
+        return m_tileMap[y * CHUNK_WIDTH + x];
+    }
+
     // const std::array<Tile, CHUNK_WIDTH * CHUNK_HEIGHT> GetTileMap() const { return m_tileMap; }
 
 private:
-
-
     void generateTileMap();
     void generateTileMesh();
 
