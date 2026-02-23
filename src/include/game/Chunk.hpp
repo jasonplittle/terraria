@@ -7,6 +7,7 @@
 #include "VertexArray.hpp"
 
 #include <iostream>
+#include <cmath>
 
 constexpr int CHUNK_WIDTH  = 32;
 constexpr int CHUNK_HEIGHT = 128; // tall world
@@ -58,9 +59,9 @@ inline float TileToTexCoord(Tile tile)
         case Tile::STONE:
             return 0.0f;
         case Tile::DIRT:
-            return 1.0;
+            return 1.0f;
         default:
-            return 0.0;
+            return 0.0f;
     }
 
 }
@@ -92,6 +93,20 @@ public:
             return AIR;
 
         return m_tileMap[y * CHUNK_WIDTH + x];
+    }
+
+    void SetTileFrom(float worldX, float worldY, Tile tile)
+    {
+        int worldTileX = (int)std::floor(worldX / TILE_SIZE);
+        int x = worldTileX - m_chunkX * CHUNK_WIDTH;
+        int y = (int)std::floor(worldY / TILE_SIZE) - 1;
+
+        std::cout << x << ", " << y << std::endl;
+        std::cout << TileToTexCoord(m_tileMap[y * CHUNK_WIDTH + x]) << std::endl;
+
+        m_tileMap[y * CHUNK_WIDTH + x] = tile;
+
+        generateTileMesh();
     }
 
     // const std::array<Tile, CHUNK_WIDTH * CHUNK_HEIGHT> GetTileMap() const { return m_tileMap; }

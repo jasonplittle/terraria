@@ -153,7 +153,7 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
     int bottom = worldToTile(m_playerPosition.y);
 
 
-    std::cout << "Player position: " << m_playerPosition.x << ", " << m_playerPosition.y << " | " << (int)std::floor(m_playerPosition.x / TILE_SIZE) << std::endl;
+    std::cout << "Player position: " << m_playerPosition.x << ", " << m_playerPosition.y << " | " << (int)std::floor(m_playerPosition.x / TILE_SIZE) << ", " << (int)std::floor(m_playerPosition.y / TILE_SIZE) << std::endl;
 
 
     for (int y = bottom; y <= top; y++)
@@ -188,6 +188,15 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
         }
     }
 
+    if (isMovingDown)
+    {
+        m_isMining = true;
+    }
+    else
+    {
+        m_isMining = false;
+    }
+
     if (isMovingUp && !m_isInAir)
     {
         m_vel.y = JUMP_VELOCITY;
@@ -196,7 +205,6 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
 
     m_isInAir = true;
     m_vel.y += GRAVITY * deltaTime;
-
 
     m_playerPosition.y += m_vel.y * deltaTime;
 
@@ -238,97 +246,6 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
         }
     }
 
-
-
-
-    // int minX = floor(left   / TILE_SIZE);
-    // int maxX = floor(right  / TILE_SIZE);
-    // int minY = floor(bottom / TILE_SIZE);
-    // int maxY = floor(top    / TILE_SIZE);
-
-    
-
-    // for (int y = minY; y <= maxY; y++) {
-    //     for (int x = minX; x <= maxX; x++) {
-    //         if (!world.IsSolid(x, y)) continue;
-
-    //         if (right > x && left < x + TILE_SIZE && top > y && bottom < y + TILE_SIZE)
-    //         {
-    //             m_playerPosition.x -= m_vel.x * deltaTime;
-    //         }
-    //     }
-    // }
-
-    // m_playerPosition.y += m_vel.y * deltaTime;
-
-    // for (int y = minY; y <= maxY; y++) {
-    //     for (int x = minX; x <= maxX; x++) {
-    //         if (!world.IsSolid(x, y)) continue;
-
-    //         if (right > x && left < x + TILE_SIZE && top > y && bottom < y + TILE_SIZE)
-    //         {
-    //             m_playerPosition.y -= m_vel.y * deltaTime;
-    //         }
-    //     }
-    // }
-
-
-    // bool collideLeft = world.IsSolid(left) || world.IsSolid(m_playerPosition.x - m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
-    // bool collideRight = world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + padding) || world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
-    // bool collideTop = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y + m_collideRadii.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y + m_collideRadii.y);
-    // bool collideBottom = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y);
-    
-    
-
-
-
-    // m_playerPosition.y += m_vel.y * deltaTime;
-    // // m_vel.y += GRAVITY * deltaTime;
-
-    // if (collideBottom)
-    // {
-    //     m_vel.y = 0;
-    //     m_isInAir = false;
-    // }
-    // if (isMovingUp && !m_isInAir)
-    // {
-    //     m_vel.y = JUMP_VELOCITY;
-    //     m_isInAir = true;
-    // }
-    // if (collideTop)
-    // {
-    //     m_vel.y = 0;
-    // }
-
-    // // if (collideRight || collideRight)
-    // // {
-    // //     m_vel.x = 0;
-    // // }
-
-    // if (isMovingLeft)
-    // {
-    //     if (!collideLeft)
-    //     {
-    //         // m_vel.x = -m_velocity; // Change to accel, clamp to max speed
-    //         m_playerPosition.x -= m_vel.x * deltaTime;
-    //     }
-    //     m_isMovingRight = false;
-    // }
-
-    // // std::cout << "Left: " << std::boolalpha << collideLeft ;
-
-
-    // if (isMovingRight)
-    // {
-    //     if (!collideRight)
-    //     {
-    //         // m_vel.x = m_velocity; // Change to accel, clamp to max speed
-
-    //         m_playerPosition.x += m_vel.x * deltaTime;
-    //     }
-    //     m_isMovingRight = true;
-    // }
-
     
     if (m_isInAir)
     {
@@ -363,17 +280,4 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
     }
 
 
-
-
-    // if (world.IsSolid(m_playerPosition.x, m_playerPosition.y))
-    // {
-        // m_isInAir = false;
-    // }
-
-
 }
-
-
-
-
-

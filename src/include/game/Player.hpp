@@ -11,6 +11,8 @@
 
 #include "World.hpp"
 
+class World; // Forward declaration
+
 enum PlayerPart
 {
     HEAD,
@@ -44,6 +46,8 @@ public:
     bool IsMovingRight() const { return m_isMovingRight; }
     void Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world);
     void UpdateCreative(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world);
+    bool IsInAir() const { return m_isInAir; }
+    bool IsMining() const { return m_isMining; }
 
 private:
     Vec2 m_playerPosition = {0.f, 1500.f};
@@ -52,6 +56,7 @@ private:
 
     bool m_isMovingRight = true;
     bool m_isInAir = true;
+    bool m_isMining = false;
 
     std::array<std::unique_ptr<Sprite>, PlayerPart::PARTS_COUNT> m_sprites;
 

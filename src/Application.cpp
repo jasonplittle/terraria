@@ -110,10 +110,10 @@ int main()
         glfwGetWindowSize(window, &width, &height);
         renderer.Viewport(width, height);
 
-        worldRenderer.Render(world, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
-
         // player.UpdateCreative(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
+        world.Update(player);
+        worldRenderer.Render(world, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
         playerRenderer.Render(player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
         glfwSwapBuffers(window);
