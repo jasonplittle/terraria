@@ -19,6 +19,8 @@
 #include "World.hpp"
 #include "WorldRenderer.hpp"
 
+#include "BackgroundRenderer.hpp"
+
 
 
 
@@ -60,6 +62,8 @@ int main()
     Player player = Player();
     PlayerRenderer playerRenderer = PlayerRenderer();
     WorldRenderer worldRenderer = WorldRenderer();
+    
+    BackgroundRenderer backgroundRenderer = BackgroundRenderer();
 
     World world = World();
 
@@ -76,6 +80,8 @@ int main()
 
     float VIRTUAL_WIDTH  = 1280.0f;
     float VIRTUAL_HEIGHT = 720.0f;
+
+    
 
     while (!glfwWindowShouldClose(window))
     {
@@ -113,6 +119,9 @@ int main()
         // player.UpdateCreative(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
         world.Update(player);
+
+        backgroundRenderer.Render({VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
+
         worldRenderer.Render(world, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
         playerRenderer.Render(player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 

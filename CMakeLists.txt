@@ -9,16 +9,16 @@ add_subdirectory(thirdparty/glew-2.1.0/build/cmake)
 add_subdirectory(thirdparty/imgui-1.92.5)
 add_subdirectory(thirdparty/stb_image)
 
-add_executable("${CMAKE_PROJECT_NAME}" 
+add_executable("${CMAKE_PROJECT_NAME}"
     ${CMAKE_SOURCE_DIR}/src/Application.cpp
     ${CMAKE_SOURCE_DIR}/src/platform/Input.cpp
     ${CMAKE_SOURCE_DIR}/src/game/Player.cpp
     ${CMAKE_SOURCE_DIR}/src/game/Sprite.cpp
     ${CMAKE_SOURCE_DIR}/src/game/PlayerRenderer.cpp
     ${CMAKE_SOURCE_DIR}/src/game/WorldRenderer.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/BackgroundRenderer.cpp
     ${CMAKE_SOURCE_DIR}/src/game/World.cpp
     ${CMAKE_SOURCE_DIR}/src/game/Chunk.cpp
-
 
     ${CMAKE_SOURCE_DIR}/src/renderer/Renderer.cpp 
     ${CMAKE_SOURCE_DIR}/src/renderer/IndexBuffer.cpp 
@@ -30,15 +30,15 @@ add_executable("${CMAKE_PROJECT_NAME}"
     ${CMAKE_SOURCE_DIR}/src/renderer/Texture.cpp
 )
 
-target_link_libraries("${CMAKE_PROJECT_NAME}" 
-    PRIVATE 
+target_link_libraries("${CMAKE_PROJECT_NAME}"
+    PRIVATE
         glfw
         glew_s
         imgui
         stb_image
 )
 
-target_include_directories("${CMAKE_PROJECT_NAME}" 
+target_include_directories("${CMAKE_PROJECT_NAME}"
     PRIVATE
         ${CMAKE_SOURCE_DIR}/src/include/game
         ${CMAKE_SOURCE_DIR}/src/include/platform
