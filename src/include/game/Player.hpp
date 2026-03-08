@@ -13,27 +13,28 @@
 
 class World; // Forward declaration
 
-enum PlayerPart
-{
-    HEAD,
-    EYEWHITE,
-    EYE,
-    HAIR,
-    LEFT_ARM,
-    TORSO,
-    RIGHT_ARM,
-    CLOTHES,
-    LEGS,
-    PANTS,
-    PARTS_COUNT
-};
-
 
 // IVec2 groundedArmAnimFrame = {};
 
+    
 
 class Player
 {
+    enum PlayerPart
+    {
+        HEAD,
+        EYEWHITE,
+        EYE,
+        HAIR,
+        LEFT_ARM,
+        TORSO,
+        RIGHT_ARM,
+        CLOTHES,
+        LEGS,
+        PANTS,
+        PARTS_COUNT
+    };
+
 public:
     Player();
 
@@ -69,6 +70,25 @@ private:
     int m_animframe = 0; 
 
 
+    static constexpr int GRAVITY = -1800.0f;
+    static constexpr float JUMP_VELOCITY = 650.0f;
+
+    struct AABB {
+        glm::vec2 pos;   // bottom-left (or top-left, just be consistent)
+        glm::vec2 size;
+    };
+
+    inline int worldToTile(float world)
+    {
+        return (int)std::floor(world / TILE_SIZE);
+    }
+
+    inline bool Intersects(const AABB& a, const AABB& b) {
+        return !(a.pos.x + a.size.x <= b.pos.x ||
+                a.pos.x >= b.pos.x + b.size.x ||
+                a.pos.y + a.size.y <= b.pos.y ||
+                a.pos.y >= b.pos.y + b.size.y);
+    }
 
     static constexpr std::array<IVec2, 5> runningArmAnimFrames = {IVec2{2, 1}, IVec2{3, 1}, IVec2{4, 1}, IVec2{5, 1}, IVec2{6, 1}};
 };

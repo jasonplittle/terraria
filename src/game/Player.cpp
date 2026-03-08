@@ -52,10 +52,6 @@ void Player::UpdatePosition(float dx, float dy)
     }
 }
 
-
-
-
-
 void Player::UpdateCreative(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world)
 {
     int velocity = 200;
@@ -97,34 +93,8 @@ void Player::UpdateCreative(float deltaTime, bool isMovingUp, bool isMovingDown,
 
 }
 
-float padding = 1.0f;
-
-int GRAVITY = -1800.0f;
-float JUMP_VELOCITY = 650.0f;
-
-inline int worldToTile(float world)
-{
-    return (int)std::floor(world / TILE_SIZE);
-}
-
-struct AABB {
-    glm::vec2 pos;   // bottom-left (or top-left, just be consistent)
-    glm::vec2 size;
-};
-
-inline bool Intersects(const AABB& a, const AABB& b) {
-    return !(a.pos.x + a.size.x <= b.pos.x ||
-             a.pos.x >= b.pos.x + b.size.x ||
-             a.pos.y + a.size.y <= b.pos.y ||
-             a.pos.y >= b.pos.y + b.size.y);
-}
-
 void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world)
 {    
-    // bool collideBottom = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y);
-    // bool collideTop = world.IsSolid(m_playerPosition.x - m_collideRadii.x + padding, m_playerPosition.y + m_collideRadii.y) || world.IsSolid(m_playerPosition.x + m_collideRadii.x - padding, m_playerPosition.y + m_collideRadii.y);
-    // bool collideLeft = world.IsSolid(m_playerPosition.x - m_collideRadii.x, m_playerPosition.y + padding) || world.IsSolid(m_playerPosition.x - m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
-    // bool collideRight = world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + padding) || world.IsSolid(m_playerPosition.x + m_collideRadii.x, m_playerPosition.y + m_collideRadii.y - padding);
 
     if (isMovingLeft)
     {
@@ -144,7 +114,6 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
     }
 
 
-
     m_playerPosition.x += m_vel.x * deltaTime;
 
     int left = worldToTile(m_playerPosition.x - m_collideRadii.x);
@@ -153,7 +122,7 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
     int bottom = worldToTile(m_playerPosition.y);
 
 
-    std::cout << "Player position: " << m_playerPosition.x << ", " << m_playerPosition.y << " | " << (int)std::floor(m_playerPosition.x / TILE_SIZE) << ", " << (int)std::floor(m_playerPosition.y / TILE_SIZE) << std::endl;
+    // std::cout << "Player position: " << m_playerPosition.x << ", " << m_playerPosition.y << " | " << (int)std::floor(m_playerPosition.x / TILE_SIZE) << ", " << (int)std::floor(m_playerPosition.y / TILE_SIZE) << std::endl;
 
 
     for (int y = bottom; y <= top; y++)

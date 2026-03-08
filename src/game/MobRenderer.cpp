@@ -1,7 +1,7 @@
-#include "PlayerRenderer.hpp"
+#include "MobRenderer.hpp"
 
 
-PlayerRenderer::PlayerRenderer()
+MobRenderer::MobRenderer()
 {
     unsigned int indicies[] = {
         0, 1, 2,
@@ -29,7 +29,7 @@ PlayerRenderer::PlayerRenderer()
 }
 
 
-void PlayerRenderer::Render(const Player& player, Vec2 screenSize)
+void MobRenderer::Render(const Mob& mob, const Player& player, Vec2 screenSize)
 {
     Renderer renderer;
 
@@ -44,15 +44,15 @@ void PlayerRenderer::Render(const Player& player, Vec2 screenSize)
 
     glm::mat4 projection = glm::ortho(-zoomX, zoomX, -zoomY, zoomY, -1.0f, 1.0f);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraPos.x, -cameraPos.y, 0));
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(player.GetPlayerPosition().x, player.GetPlayerPosition().y, 0.0));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(mob.GetPosition().x, mob.GetPosition().y, 0.0));
     model = glm::scale(model, glm::vec3(player.GetPlayerSize().x, player.GetPlayerSize().y, 0.0f));
     glm::mat4 mvp = projection * view * model;
 
 
-    for (const auto& sprite : player.GetSprites())
+    for (const auto& sprite : mob.GetSprites())
     {
         Vec4 color = sprite->GetColor();
-        Vec4 uv = sprite->GetAtlasCoords(!player.IsMovingRight());
+        Vec4 uv = sprite->GetAtlasCoords(!mob.IsMovingRight());
         
         m_shader->Bind();
         m_shader->SetUniformMat4f("u_MVP", mvp);
