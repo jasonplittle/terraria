@@ -25,10 +25,17 @@ in float vTexCoord;
 out vec4 FragColor;
 
 uniform sampler2D u_Atlas[2];
+uniform vec4 u_FillColor;
 
 void main()
 {
     // FragColor = vec4(vUV, 1.0, 1.0);
     // FragColor = texture(u_Atlas, vUV) + vec4(1.0, 1.0, 1.0, 1.0);
-    FragColor = texture(u_Atlas[int(vTexCoord)], vUV);
+
+    vec4 texColor = texture(u_Atlas[int(vTexCoord)], vUV);
+
+    if (texColor.a == 0.0)
+        FragColor = u_FillColor;
+    else
+        FragColor = texture(u_Atlas[int(vTexCoord)], vUV);
 }

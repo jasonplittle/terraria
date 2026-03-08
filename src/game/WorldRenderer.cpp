@@ -6,7 +6,6 @@ WorldRenderer::WorldRenderer()
     m_shader = std::make_unique<Shader>("src/renderer/shaders/Tile.shader");
     m_textureStone = std::make_unique<Texture>("resources/Tiles_1.png");
     m_textureDirt = std::make_unique<Texture>("resources/Tiles_0.png");
-
 }
 
 
@@ -35,6 +34,7 @@ void WorldRenderer::Render(World& world, const Player& player, Vec2 screenSize)
     int samplers[2] = {0, 1};
     m_shader->SetUniform1iv("u_Atlas", 2, samplers);
     m_shader->SetUniformMat4f("u_MVP", mvp);
+    m_shader->SetUniform4f("u_FillColor", 0.29f, 0.24f, 0.23f, 1.0f);
 
     static const int LOAD_RADIUS = 3;
 
@@ -44,7 +44,4 @@ void WorldRenderer::Render(World& world, const Player& player, Vec2 screenSize)
     }
     
 }
-
-
-
 

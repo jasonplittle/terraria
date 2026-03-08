@@ -56,7 +56,7 @@ void Chunk::generateTileMap()
             else if (worldY >= surfaceY - 5)
                 tile = Tile::DIRT;
             else if (worldY < surfaceY - 5 && cave > 0.4f)
-                tile = Tile::AIR;
+                tile = Tile::CAVE;
             else
                 tile = Tile::STONE;
 

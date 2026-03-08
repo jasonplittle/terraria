@@ -47,6 +47,7 @@ struct Vertex
 enum Tile
 {
     AIR = 0,
+    CAVE,
     GRASS,
     DIRT,
     STONE
@@ -60,6 +61,8 @@ inline float TileToTexCoord(Tile tile)
             return 0.0f;
         case Tile::DIRT:
             return 1.0f;
+        // case Tile::CAVE:
+        //     return 1.0f;
         default:
             return 0.0f;
     }
@@ -121,6 +124,7 @@ private:
         {
             case STONE: return {0.0f, V, U, 1.0f};
             case DIRT: return {0.0f, V, U, 1.0f};
+            // case CAVE: return {0.0f, 1 - (U * 5), U * 10, 1.0f};
             // case DIRT:  return {0.25f, 0.0f, 0.5f, 0.25f};
             // case STONE: return {0.5f, 0.0f, 0.75f, 0.25f};
             default:    return {0, 0, 0, 0};

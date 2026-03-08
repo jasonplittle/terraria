@@ -16,7 +16,7 @@ bool World::IsSolid(int worldTileX, int y)
     // std::cout << worldX << " " << y << std::endl;
 
     Tile tile = GetChunk(worldTileX * TILE_SIZE).getTileFromWorldTileX(worldTileX, y);
-    return tile != AIR;
+    return tile != AIR && tile != CAVE;
 }
 
 const Chunk& World::GetChunk(float worldX, int offset)
@@ -43,6 +43,6 @@ void World::Update(const Player& player)
 
         int chunkCoord = (int)std::floor(worldX / TILE_SIZE / CHUNK_WIDTH);
 
-        m_chunks.at(chunkCoord).SetTileFrom(worldX, worldY, Tile::AIR);
+        m_chunks.at(chunkCoord).SetTileFrom(worldX, worldY, Tile::CAVE);
     }
 }
