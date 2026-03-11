@@ -22,7 +22,7 @@ Mob::Mob()
     m_sprites[MobPart::TORSO] = std::make_unique<Sprite>("resources/Player_0_3.png", spriteSize, IVec2{0, 0});
     m_sprites[MobPart::RIGHT_ARM] = std::make_unique<Sprite>("resources/Player_0_7.png", spriteSize, IVec2{2, 1});
     m_sprites[MobPart::LEGS] = std::make_unique<Sprite>("resources/Player_0_10.png", spriteSize, IVec2{0, 0});
-    // m_sprites[PlayerPart::CLOTHES] = std::make_unique<Sprite>("resources/Player_0_6.png", spriteSize, IVec2{0, 0});
+    m_sprites[MobPart::CLOTHES] = std::make_unique<Sprite>("resources/Player_0_6.png", spriteSize, IVec2{0, 0});
     m_sprites[MobPart::PANTS] = std::make_unique<Sprite>("resources/Player_0_11.png", spriteSize, IVec2{0, 0});
 
     m_sprites[MobPart::EYE]->SetColor(eyeColor);
@@ -31,8 +31,8 @@ Mob::Mob()
     m_sprites[MobPart::LEGS]->SetColor(skinColor);
     m_sprites[MobPart::LEFT_ARM]->SetColor(skinColor);
     m_sprites[MobPart::RIGHT_ARM]->SetColor(skinColor);
-    // m_sprites[PlayerPart::CLOTHES]->SetColor(clothesColor);
-    // m_sprites[PlayerPart::PANTS]->SetColor(pantsColor);
+    // m_sprites[MobPart::CLOTHES]->SetColor(clothesColor);
+    
 
 }
 
@@ -52,17 +52,134 @@ void Mob::UpdatePosition(float dx, float dy)
     }
 }
 
+void Mob::updateIdle(float dt)
+{
+    // std::cout << "idle" << std::endl;
 
-void Mob::Update(float deltaTime, World& world)
-{    
-    m_isInAir = true;
-    m_vel.y += GRAVITY * deltaTime;
-    m_position.y += m_vel.y * deltaTime;
+    m_vel.x = 0;
+
+    m_idleTimer += dt;
+
+    if(m_idleTimer > 2.0f)
+    {
+        m_state = MobState::Wander;
+        m_idleTimer = 0;
+    }
+}
+
+void Mob::updateWander(float dt)
+{
+    // std::cout << "wander" << std::endl;
+
+    m_vel.x = (m_isMovingRight ? 1 : -1) * m_velocity;
+
+    m_wanderTimer += dt;
+
+    if(m_wanderTimer > 3.0f)
+    {
+        m_isMovingRight = (rand() % 2 == 0);
+        m_wanderTimer = 0;
+    }
+}
+
+void Mob::updateChase(float dt, const Player& player)
+{
+    // std::cout << "chase" << std::endl;
+
+    if(player.GetPlayerPosition().x < m_position.x)
+    {
+        m_vel.x = -m_velocity;
+        m_isMovingRight = false;
+    }
+    else
+    {
+        m_vel.x = m_velocity;
+        m_isMovingRight = true;
+    }
+}
+
+
+void Mob::Update(float deltaTime, const Player& player, World& world)
+{
+    float distance = glm::length(glm::vec2(player.GetPlayerPosition().x, player.GetPlayerPosition().y) - glm::vec2(m_position.x, m_position.y));
+
+    if (distance < 200.0f)
+    {
+        m_state = MobState::Chase;
+    }
+    else
+    {
+        if (m_state == MobState::Chase)
+        {
+            m_state = MobState::Idle;
+        }
+    }
+
+    switch(m_state)
+    {
+        case MobState::Idle:
+            updateIdle(deltaTime);
+            m_sprites[MobPart::CLOTHES]->SetColor({100 / 255.f, 161 / 255.f, 130 / 255.f, 1.0f});
+            break;
+
+        case MobState::Wander:
+            updateWander(deltaTime);
+            m_sprites[MobPart::CLOTHES]->SetColor({236 / 255.f, 100 / 255.f, 130 / 255.f, 1.0f});
+            break;
+
+        case MobState::Chase:
+            updateChase(deltaTime, player);
+            m_sprites[MobPart::CLOTHES]->SetColor({236 / 255.f, 161 / 255.f, 50 / 255.f, 1.0f});
+            break;
+
+        case MobState::Attack:
+            // updateAttack(deltaTime);
+            break;
+    }
+
+    m_position.x += m_vel.x * deltaTime;
 
     int left = worldToTile(m_position.x - m_collideRadii.x);
     int right = worldToTile(m_position.x + m_collideRadii.x);
     int top = worldToTile(m_position.y + m_collideRadii.y);
     int bottom = worldToTile(m_position.y);
+
+
+    for (int y = bottom; y <= top; y++)
+    {
+        for (int x = left; x <= right; x++)
+        {
+            if (!world.IsSolid(x, y)) continue;
+
+            float tileLeft  = x * TILE_SIZE;
+            float tileRight = tileLeft + TILE_SIZE;
+
+            if (Intersects({{m_position.x - m_collideRadii.x, m_position.y}, {m_collideRadii.x * 2, m_collideRadii.y}}, {{x * TILE_SIZE, y * TILE_SIZE}, {TILE_SIZE, TILE_SIZE}}))
+            {
+                if (m_vel.x > 0.0f)
+                {
+                    m_position.x = tileLeft - m_collideRadii.x;
+                    m_vel.x = 0.0f;
+                }
+                else if (m_vel.x < 0.0f)
+                {
+                    m_position.x = tileRight + m_collideRadii.x;
+                    m_vel.x = 0.0f;
+                }
+            }   
+        }
+    }
+
+
+    m_isInAir = true;
+    m_vel.y += GRAVITY * deltaTime;
+    m_position.y += m_vel.y * deltaTime;
+
+    left = worldToTile(m_position.x - m_collideRadii.x);
+    right = worldToTile(m_position.x + m_collideRadii.x);
+    top = worldToTile(m_position.y + m_collideRadii.y);
+    bottom = worldToTile(m_position.y);
+
 
     for (int y = bottom; y <= top; y++)
     {
@@ -78,16 +195,12 @@ void Mob::Update(float deltaTime, World& world)
 
                 if (m_vel.y > 0.0f)
                 {
-                    // std::cout << "Collide player top: " << tileBottom << " " << m_playerPosition.y << std::endl;
-
                     m_position.y = tileBottom - m_collideRadii.y;
                     m_vel.y = 0.0f;
 
                 }
                 else if (m_vel.y < 0.0f)
                 {
-                    // std::cout << "Collide player bottom: " << tileTop << " " << m_playerPosition.y << std::endl;
-
                     m_position.y = tileTop;
                     m_vel.y = 0.0f;
                     m_isInAir = false;
@@ -95,7 +208,7 @@ void Mob::Update(float deltaTime, World& world)
             }
         }
     }
-        
+
     if (m_isInAir)
     {
         m_sprites[MobPart::LEFT_ARM]->SetAtlasPosition(IVec2{2, 3});
@@ -108,5 +221,22 @@ void Mob::Update(float deltaTime, World& world)
         m_sprites[MobPart::RIGHT_ARM]->SetAtlasPosition(IVec2{2, 0});
     }
 
+    if (m_state == MobState::Wander || m_state == MobState::Chase)
+    {
+        m_animTimer += deltaTime;
+
+        if (m_animTimer >= m_animSpeed)
+        {
+            m_animTimer -= m_animSpeed;
+            m_animframe++;
+            m_animframe %= 14;
+            // m_animframe %= 5;
+
+            m_sprites[MobPart::PANTS]->SetAtlasPosition(IVec2{0, m_animframe});
+            m_sprites[MobPart::LEGS]->SetAtlasPosition(IVec2{0, m_animframe});
+
+            // m_sprites[PlayerPart::RIGHT_ARM]->SetAtlasPosition(runningArmAnimFrames[m_animframe]);
+        }
+    }
 
 }

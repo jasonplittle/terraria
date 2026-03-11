@@ -10,6 +10,7 @@
 #include "UtilLib.hpp"
 
 #include "World.hpp"
+#include "Player.hpp"
 
 
 class Mob
@@ -23,8 +24,17 @@ class Mob
         TORSO,
         RIGHT_ARM,
         LEGS,
+        CLOTHES,
         PANTS,
         PARTS_COUNT
+    };
+
+    enum class MobState
+    {
+        Idle,
+        Wander,
+        Chase,
+        Attack
     };
 
 public:
@@ -37,10 +47,18 @@ public:
     Vec2 GetSize() const { return m_size; }
     Vec2 GetPosition() const { return m_position; }
     bool IsMovingRight() const { return m_isMovingRight; }
-    void Update(float deltaTime, World& world);
+    void Update(float deltaTime, const Player& player, World& world);
     bool IsInAir() const { return m_isInAir; }
 
 private:
+    void updateIdle(float dt);
+    void updateWander(float dt);
+    void updateChase(float dt, const Player& player);
+
+    MobState m_state = MobState::Idle;
+    float m_idleTimer = 0;
+    float m_wanderTimer = 0;
+
     Vec2 m_position = {20.f, 1500.f};
     Vec2 m_size = {24.0f, 24.0f};
     Vec2 m_collideRadii = {8.0f, 20.0f}; // x starts middle, y starts bottom
@@ -52,7 +70,7 @@ private:
 
     Vec2 m_vel = { 0.f, 0.f };
 
-    float m_velocity = 100.f;
+    float m_velocity = 80.f;
 
     float m_animSpeed = 0.08;
     float m_animTimer = 0.0;

@@ -122,7 +122,7 @@ int main()
 
         // player.UpdateCreative(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
-        mob.Update(dt, world);
+        mob.Update(dt, player, world);
         world.Update(player);
 
         backgroundRenderer.Render({VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
