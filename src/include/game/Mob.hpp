@@ -11,8 +11,6 @@
 
 #include "World.hpp"
 
-// IVec2 groundedArmAnimFrame = {};
-
 
 class Mob
 {

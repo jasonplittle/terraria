@@ -98,13 +98,23 @@ public:
         return m_tileMap[y * CHUNK_WIDTH + x];
     }
 
+    Tile getTileFromWorldX(int worldX, int worldY) const
+    {
+        int worldTileX = (int)std::floor(worldX / TILE_SIZE);
+        int x = worldTileX - m_chunkX * CHUNK_WIDTH;
+        int y = (int)std::floor(worldY / TILE_SIZE) - 1;
+
+        return m_tileMap[y * CHUNK_WIDTH + x];
+    }
+
+
     void SetTileFrom(float worldX, float worldY, Tile tile)
     {
         int worldTileX = (int)std::floor(worldX / TILE_SIZE);
         int x = worldTileX - m_chunkX * CHUNK_WIDTH;
         int y = (int)std::floor(worldY / TILE_SIZE) - 1;
 
-        std::cout << x << ", " << y << std::endl;
+        // std::cout << x << ", " << y << std::endl;
         std::cout << TileToTexCoord(m_tileMap[y * CHUNK_WIDTH + x]) << std::endl;
 
         m_tileMap[y * CHUNK_WIDTH + x] = tile;
