@@ -74,7 +74,9 @@ private:
 
     float m_animSpeed = 0.08;
     float m_animTimer = 0.0;
-    int m_animframe = 0; 
+    int m_animframe = 0;
+    
+    static constexpr float JUMP_VELOCITY = 400.0f;
 
 
     inline int worldToTile(float world)

@@ -6,7 +6,7 @@
 Mob::Mob()
 {
 
-    Vec4 eyeColor = {0.2, 0.5, 0.7, 1.0};
+    Vec4 eyeColor = {1.0, 0.2, 0.2, 1.0};
 	Vec4 skinColor = {236 / 255.f, 161 / 255.f, 130 / 255.f, 1.0f};
 	// Vec4 hairColor = {55 / 255.f, 31 / 255.f, 24 / 255.f, 1.0};
 	// Vec4 clothesColor = {189 / 255.f, 30 / 255.f, 73 / 255.f, 1.0};
@@ -169,6 +169,21 @@ void Mob::Update(float deltaTime, const Player& player, World& world)
             }   
         }
     }
+
+
+    // Detect jump
+    if (abs(m_vel.x) > 0 && !m_isInAir && distance > TILE_SIZE)
+    {
+        bool sol = world.IsSolid(worldToTile(m_position.x + ((m_vel.x > 0 ? TILE_SIZE : -TILE_SIZE))), worldToTile(m_position.y));
+
+        // std::cout << worldToTile(m_position.x) << ", " << worldToTile(m_position.y) << " - " << sol << std::endl;
+
+        if (sol)
+        {
+            m_vel.y = JUMP_VELOCITY;
+        }
+    }
+
 
 
     m_isInAir = true;
