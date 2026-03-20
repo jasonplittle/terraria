@@ -14,13 +14,14 @@
 
 #include "Player.hpp"
 #include "Mob.hpp"
+#include "MobManager.hpp"
 
 class MobRenderer
 {
 public:
     MobRenderer();
 
-    void Render(const Mob& mob, const Player& player, Vec2 screenSize);
+    void Render(const MobManager& mob, const Player& player, Vec2 screenSize);
 
 private:
     std::unique_ptr<Shader> m_shader;

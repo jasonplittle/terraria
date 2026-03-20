@@ -63,7 +63,7 @@ private:
 
     Vec2 m_vel = { 0.f, 0.f };
 
-    float m_velocity = 100.f;
+    float m_velocity = 200.f;
 
     float m_animSpeed = 0.08;
     float m_animTimer = 0.0;

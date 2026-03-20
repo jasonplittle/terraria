@@ -21,8 +21,8 @@
 
 #include "BackgroundRenderer.hpp"
 
-#include "Mob.hpp"
 #include "MobRenderer.hpp"
+#include "MobManager.hpp"
 
 
 
@@ -63,7 +63,7 @@ int main()
     renderer.EnableBlending();
 
     Player player = Player();
-    Mob mob = Mob();
+    MobManager mobManager = MobManager();
     PlayerRenderer playerRenderer = PlayerRenderer();
     WorldRenderer worldRenderer = WorldRenderer();
     BackgroundRenderer backgroundRenderer = BackgroundRenderer();
@@ -122,14 +122,14 @@ int main()
 
         // player.UpdateCreative(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
-        mob.Update(dt, player, world);
+        mobManager.Update(dt, player, world);
         world.Update(player);
 
         backgroundRenderer.Render({VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
         worldRenderer.Render(world, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
         playerRenderer.Render(player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
-        mobRenderer.Render(mob, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
+        mobRenderer.Render(mobManager, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
         glfwSwapBuffers(window);
 		glfwPollEvents();

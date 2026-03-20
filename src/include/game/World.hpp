@@ -17,6 +17,7 @@ public:
     const Chunk& GetChunk(float worldX, int offset = 0);
     bool IsSolid(int worldTileX, int y);
     void Update(const Player& player);
+    int GetSurfaceHeight(float worldX);
 
 private:
     std::map<int, Chunk> m_chunks;

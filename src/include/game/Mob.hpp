@@ -38,7 +38,7 @@ class Mob
     };
 
 public:
-    Mob();
+    Mob(float x, float y);
 
     void UpdatePosition(float dx, float dy);
 
@@ -59,7 +59,7 @@ private:
     float m_idleTimer = 0;
     float m_wanderTimer = 0;
 
-    Vec2 m_position = {20.f, 1500.f};
+    Vec2 m_position;
     Vec2 m_size = {24.0f, 24.0f};
     Vec2 m_collideRadii = {8.0f, 20.0f}; // x starts middle, y starts bottom
 

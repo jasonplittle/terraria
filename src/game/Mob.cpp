@@ -3,7 +3,8 @@
 #include <iostream>
 
 
-Mob::Mob()
+Mob::Mob(float x, float y)
+ : m_position{x, y}
 {
 
     Vec4 eyeColor = {1.0, 0.2, 0.2, 1.0};
@@ -107,11 +108,12 @@ void Mob::Update(float deltaTime, const Player& player, World& world)
     {
         m_state = MobState::Chase;
     }
-    else
+
+    if (m_state == MobState::Chase)
     {
-        if (m_state == MobState::Chase)
+        if (distance > 400.f)
         {
-            m_state = MobState::Idle;
+            m_state = MobState::Wander;
         }
     }
 
@@ -124,12 +126,12 @@ void Mob::Update(float deltaTime, const Player& player, World& world)
 
         case MobState::Wander:
             updateWander(deltaTime);
-            m_sprites[MobPart::CLOTHES]->SetColor({236 / 255.f, 100 / 255.f, 130 / 255.f, 1.0f});
+            m_sprites[MobPart::CLOTHES]->SetColor({236 / 255.f, 161 / 255.f, 50 / 255.f, 1.0f});
             break;
 
         case MobState::Chase:
             updateChase(deltaTime, player);
-            m_sprites[MobPart::CLOTHES]->SetColor({236 / 255.f, 161 / 255.f, 50 / 255.f, 1.0f});
+            m_sprites[MobPart::CLOTHES]->SetColor({236 / 255.f, 100 / 255.f, 130 / 255.f, 1.0f});
             break;
 
         case MobState::Attack:

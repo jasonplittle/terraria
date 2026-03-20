@@ -11,7 +11,7 @@ Chunk::Chunk(int chunkX) : m_chunkX(chunkX)
     generateTileMesh();
 }
 
-int GetSurfaceHeight(int worldX, const FastNoiseLite& noise)
+int calcSurfaceHeight(int worldX, const FastNoiseLite& noise)
 {
     float n = noise.GetNoise((float)worldX, 0.0f); // -1 .. 1
     n = (n + 1.0f) * 0.5f;                          //  0 .. 1
@@ -38,7 +38,7 @@ void Chunk::generateTileMap()
     for (int x = 0; x < CHUNK_WIDTH; x++)
     {
         int worldX = m_chunkX * CHUNK_WIDTH + x;
-        int surfaceY = GetSurfaceHeight(worldX, noise);
+        int surfaceY = calcSurfaceHeight(worldX, noise);
 
         for (int y = 0; y < CHUNK_HEIGHT; y++)
         {

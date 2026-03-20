@@ -36,7 +36,7 @@ void WorldRenderer::Render(World& world, const Player& player, Vec2 screenSize)
     m_shader->SetUniformMat4f("u_MVP", mvp);
     m_shader->SetUniform4f("u_FillColor", 0.29f, 0.24f, 0.23f, 1.0f);
 
-    static const int LOAD_RADIUS = 3;
+    static const int LOAD_RADIUS = 5;
 
     for (int x = -LOAD_RADIUS; x <= LOAD_RADIUS; x++)
     {

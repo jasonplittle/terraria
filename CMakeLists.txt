@@ -21,6 +21,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     ${CMAKE_SOURCE_DIR}/src/game/Chunk.cpp
     ${CMAKE_SOURCE_DIR}/src/game/Mob.cpp
     ${CMAKE_SOURCE_DIR}/src/game/MobRenderer.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/MobManager.cpp
 
     ${CMAKE_SOURCE_DIR}/src/renderer/Renderer.cpp 
     ${CMAKE_SOURCE_DIR}/src/renderer/IndexBuffer.cpp 

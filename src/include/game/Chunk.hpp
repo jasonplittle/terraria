@@ -69,6 +69,24 @@ inline float TileToTexCoord(Tile tile)
 
 }
 
+inline std::string TileToString(Tile tile)
+{
+    switch(tile)
+    {
+        case Tile::STONE:
+            return "Stone";
+        case Tile::DIRT:
+            return "Dirt";
+        case Tile::CAVE:
+            return "Cave";
+        case Tile::AIR:
+            return "Air";
+        default:
+            return "Null";
+    }
+
+}
+
 class Chunk
 {
 public:
@@ -84,6 +102,24 @@ public:
 
         return m_tileMap[y * CHUNK_WIDTH + x];
     }
+
+    int GetSurfaceHeight(int worldX) const
+    {
+        int worldTileX = (int)std::floor(worldX / TILE_SIZE);
+        int x = worldTileX - m_chunkX * CHUNK_WIDTH;
+
+        for (int y = 0; y < CHUNK_HEIGHT; y++)
+        {
+            Tile tile = m_tileMap[y * CHUNK_WIDTH + x];
+            if (tile == Tile::AIR)
+            {
+                return y * TILE_SIZE;
+            }
+        }
+
+        return CHUNK_HEIGHT;
+    }
+
 
     Tile getTileFromWorldTileX(int worldTileX, int y) const
     {

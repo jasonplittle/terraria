@@ -11,6 +11,12 @@ World::World()
     m_chunks.try_emplace(-1, Chunk(-1));
 }
 
+
+int World::GetSurfaceHeight(float worldX)
+{
+    return GetChunk(worldX).GetSurfaceHeight(worldX);
+}
+
 bool World::IsSolid(int worldTileX, int y)
 {
     // std::cout << worldX << " " << y << std::endl;
