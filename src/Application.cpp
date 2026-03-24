@@ -79,6 +79,7 @@ int main()
     bool isMovingDown = false;
     bool isMovingLeft = false;
     bool isMovingRight = false;
+    bool isAttacking = false;
 
     int width, height;
 
@@ -95,6 +96,7 @@ int main()
         isMovingDown = false;
         isMovingLeft = false;
         isMovingRight = false;
+        isAttacking = false;
 
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_UP))
         {
@@ -112,6 +114,10 @@ int main()
         {
             isMovingRight = true;
         }
+        if (Input::Instance().IsKeyPressed(window, GLFW_KEY_SPACE))
+        {
+            isAttacking = true;
+        }
 
         currentTime = glfwGetTime();
         dt = currentTime - lastTime;
@@ -121,7 +127,7 @@ int main()
         renderer.Viewport(width, height);
 
         // player.UpdateCreative(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
-        player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
+        player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, isAttacking, world);
         mobManager.Update(dt, player, world);
         world.Update(player);
 

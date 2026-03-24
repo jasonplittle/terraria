@@ -16,7 +16,7 @@ class World; // Forward declaration
 
 // IVec2 groundedArmAnimFrame = {};
 
-    
+
 
 class Player
 {
@@ -45,10 +45,11 @@ public:
     Vec2 GetPlayerSize() const { return m_playerSize; }
     Vec2 GetPlayerPosition() const { return m_playerPosition; }
     bool IsMovingRight() const { return m_isMovingRight; }
-    void Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world);
+    void Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, bool isAttacking, World& world);
     void UpdateCreative(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world);
     bool IsInAir() const { return m_isInAir; }
     bool IsMining() const { return m_isMining; }
+    bool IsAttacking() const { return m_isAttacking; }
 
 private:
     Vec2 m_playerPosition = {0.f, 1500.f};
@@ -58,6 +59,7 @@ private:
     bool m_isMovingRight = true;
     bool m_isInAir = true;
     bool m_isMining = false;
+    bool m_isAttacking = false;
 
     std::array<std::unique_ptr<Sprite>, PlayerPart::PARTS_COUNT> m_sprites;
 

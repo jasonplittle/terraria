@@ -151,7 +151,7 @@ public:
         int y = (int)std::floor(worldY / TILE_SIZE) - 1;
 
         // std::cout << x << ", " << y << std::endl;
-        std::cout << TileToTexCoord(m_tileMap[y * CHUNK_WIDTH + x]) << std::endl;
+        // std::cout << TileToTexCoord(m_tileMap[y * CHUNK_WIDTH + x]) << std::endl;
 
         m_tileMap[y * CHUNK_WIDTH + x] = tile;
 

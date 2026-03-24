@@ -93,7 +93,7 @@ void Player::UpdateCreative(float deltaTime, bool isMovingUp, bool isMovingDown,
 
 }
 
-void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, World& world)
+void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, bool isAttacking, World& world)
 {    
 
     if (isMovingLeft)
@@ -157,14 +157,9 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
         }
     }
 
-    if (isMovingDown)
-    {
-        m_isMining = true;
-    }
-    else
-    {
-        m_isMining = false;
-    }
+    m_isMining = isMovingDown;
+    m_isAttacking = isAttacking;
+
 
     if (isMovingUp && !m_isInAir)
     {
