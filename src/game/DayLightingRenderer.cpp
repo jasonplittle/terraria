@@ -1,9 +1,10 @@
-#include "BackgroundRenderer.hpp"
+#include "DayLightingRenderer.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-BackgroundRenderer::BackgroundRenderer()
+
+DayLightingRenderer::DayLightingRenderer()
 {
     unsigned int indicies[] = {
         0, 1, 2,
@@ -11,27 +12,25 @@ BackgroundRenderer::BackgroundRenderer()
     };
 
     float verticies[] = {
-        -0.5f, -0.5f, 0.0f, 0.0f,
-         0.5f, -0.5f, 1.0f, 0.0f,
-         0.5f,  0.5f, 1.0f, 1.0f,
-        -0.5f,  0.5f, 0.0f, 1.0f
+        -0.5f, -0.5f,
+         0.5f, -0.5f,
+         0.5f,  0.5f,
+        -0.5f,  0.5f
     };
 
-    m_shader = std::make_unique<Shader>("src/renderer/shaders/Background.shader");
-    m_texture = std::make_unique<Texture>("resources/splash.png");
+    m_shader = std::make_unique<Shader>("src/renderer/shaders/DayLighting.shader");
 
     m_vertexArray = std::make_unique<VertexArray>();
     m_indexBuffer = std::make_unique<IndexBuffer>(indicies, 6);
-    m_vertexBuffer = std::make_unique<VertexBuffer>(verticies, 4 * 4 * sizeof(float));
+    m_vertexBuffer = std::make_unique<VertexBuffer>(verticies, 4 * 2 * sizeof(float));
 
     VertexBufferLayout layout;
 
     layout.Push<float>(2);
-    layout.Push<float>(2);
     m_vertexArray->AddBuffer(*m_vertexBuffer, layout);
 }
 
-void BackgroundRenderer::Render(Vec2 screenSize)
+void DayLightingRenderer::Render(const DayLighting& dayLighting, Vec2 screenSize)
 {
     Renderer renderer;
 
@@ -52,10 +51,7 @@ void BackgroundRenderer::Render(Vec2 screenSize)
     m_shader->Bind();
     m_shader->SetUniformMat4f("u_MVP", mvp);
     
-    m_texture->Bind();
-    m_shader->SetUniform1i("u_Texture", 0);
+    m_shader->SetUniform1f("u_Lighting", dayLighting.GetLighting());
     renderer.Draw(*m_vertexArray, *m_indexBuffer, *m_shader);
 
 }
-
-

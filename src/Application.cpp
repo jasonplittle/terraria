@@ -24,6 +24,9 @@
 #include "MobRenderer.hpp"
 #include "MobManager.hpp"
 
+#include "DayLighting.hpp"
+#include "DayLightingRenderer.hpp"
+
 
 
 
@@ -68,8 +71,11 @@ int main()
     WorldRenderer worldRenderer = WorldRenderer();
     BackgroundRenderer backgroundRenderer = BackgroundRenderer();
     MobRenderer mobRenderer = MobRenderer();
+    DayLightingRenderer dayLightingRenderer = DayLightingRenderer();
 
     World world = World();
+
+    DayLighting dayLighting = DayLighting();
 
     float lastTime = glfwGetTime();
     float currentTime;
@@ -130,12 +136,14 @@ int main()
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, isAttacking, world);
         mobManager.Update(dt, player, world);
         world.Update(player);
+        dayLighting.Update(dt);
 
         backgroundRenderer.Render({VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
         worldRenderer.Render(world, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
         playerRenderer.Render(player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
         mobRenderer.Render(mobManager, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
+        dayLightingRenderer.Render(dayLighting, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
         glfwSwapBuffers(window);
 		glfwPollEvents();
