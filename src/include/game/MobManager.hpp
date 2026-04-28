@@ -7,7 +7,7 @@
 class MobManager
 {
 public:
-    void Update(float dt, const Player& player, World& world);
+    void Update(float dt, Player& player, World& world);
     const std::vector<Mob>& GetMobs() const { return mobs; };
 
 private:

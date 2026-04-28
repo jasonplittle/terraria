@@ -245,3 +245,10 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
 
 
 }
+
+void Player::TakeDamage(float damage)
+{
+    m_health -= damage;
+
+    std::cout << "Health: " << m_health << std::endl;
+}

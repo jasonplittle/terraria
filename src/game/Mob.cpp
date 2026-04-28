@@ -99,21 +99,46 @@ void Mob::updateChase(float dt, const Player& player)
     }
 }
 
+void Mob::updateAttack(float dt, Player& player, float distance)
+{
+    m_vel.x = 0;
+    m_attackTimer += dt;
 
-void Mob::Update(float deltaTime, const Player& player, World& world)
+    if (m_attackTimer > 0.5f)
+    {
+        if (distance < 20.f)
+        {
+            player.TakeDamage(50.f - distance);
+        }
+        m_attackTimer = 0.0f;
+        m_isAlive = false;
+    }
+
+}
+
+
+void Mob::Update(float deltaTime, Player& player, World& world)
 {
     float distance = glm::length(glm::vec2(player.GetPlayerPosition().x, player.GetPlayerPosition().y) - glm::vec2(m_position.x, m_position.y));
 
-    if (distance < 200.0f)
+    if (distance < 20.f)
     {
-        m_state = MobState::Chase;
+        m_state = MobState::Attack;
     }
 
-    if (m_state == MobState::Chase)
+    if (m_state != MobState::Attack)
     {
-        if (distance > 400.f)
+        if (distance < 200.0f)
         {
-            m_state = MobState::Wander;
+            m_state = MobState::Chase;
+        }
+
+        if (m_state == MobState::Chase)
+        {
+            if (distance > 400.f)
+            {
+                m_state = MobState::Wander;
+            }
         }
     }
 
@@ -135,7 +160,8 @@ void Mob::Update(float deltaTime, const Player& player, World& world)
             break;
 
         case MobState::Attack:
-            // updateAttack(deltaTime);
+            updateAttack(deltaTime, player, distance);
+            m_sprites[MobPart::CLOTHES]->SetColor({(236 + (m_attackTimer * 18))  / 255.f, (100 + (m_attackTimer * 155)) / 255.f, (130 + (m_attackTimer * 125)) / 255.f, 1.0f});
             break;
     }
 

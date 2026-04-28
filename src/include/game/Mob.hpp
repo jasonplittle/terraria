@@ -47,17 +47,22 @@ public:
     Vec2 GetSize() const { return m_size; }
     Vec2 GetPosition() const { return m_position; }
     bool IsMovingRight() const { return m_isMovingRight; }
-    void Update(float deltaTime, const Player& player, World& world);
+    void Update(float deltaTime, Player& player, World& world);
     bool IsInAir() const { return m_isInAir; }
+    bool IsAlive() const { return m_isAlive; }
 
 private:
     void updateIdle(float dt);
     void updateWander(float dt);
     void updateChase(float dt, const Player& player);
+    void updateAttack(float dt, Player& player, float distance);
+
+    bool m_isAlive = true;
 
     MobState m_state = MobState::Idle;
     float m_idleTimer = 0;
     float m_wanderTimer = 0;
+    float m_attackTimer = 0;
 
     Vec2 m_position;
     Vec2 m_size = {24.0f, 24.0f};

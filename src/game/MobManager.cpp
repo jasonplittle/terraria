@@ -3,11 +3,17 @@
 #include <random>
 
 
-void MobManager::Update(float dt, const Player& player, World& world)
+void MobManager::Update(float dt, Player& player, World& world)
 {
-    for (auto& mob : mobs)
+    for (auto it = mobs.begin(); it != mobs.end(); )
     {
-        mob.Update(dt, player, world);
+        it->Update(dt, player, world);
+        bool isAlive = it->IsAlive();
+
+        if (!isAlive)
+            it = mobs.erase(it);
+        else
+            ++it;
     }
 
 
@@ -45,7 +51,7 @@ void MobManager::Update(float dt, const Player& player, World& world)
 
 void MobManager::spawn(int worldX, int worldY)
 {
-    std::cout << worldX << ", " << worldY << std::endl;
+    std::cout << "Spawn: " << worldX << ", " << worldY << std::endl;
 
     mobs.push_back(Mob(worldX, worldY));
 }

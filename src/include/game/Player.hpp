@@ -50,11 +50,14 @@ public:
     bool IsInAir() const { return m_isInAir; }
     bool IsMining() const { return m_isMining; }
     bool IsAttacking() const { return m_isAttacking; }
+    void TakeDamage(float damage);
 
 private:
     Vec2 m_playerPosition = {0.f, 1500.f};
     Vec2 m_playerSize = {32.0f, 32.0f};
     Vec2 m_collideRadii = {10.0f, 30.0f}; // x starts middle, y starts bottom
+
+    float m_health = 100.0f;
 
     bool m_isMovingRight = true;
     bool m_isInAir = true;
