@@ -94,8 +94,7 @@ void Player::UpdateCreative(float deltaTime, bool isMovingUp, bool isMovingDown,
 }
 
 void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool isMovingLeft, bool isMovingRight, bool isAttacking, World& world)
-{    
-
+{
     if (isMovingLeft)
     {
         m_vel.x = -m_velocity;
@@ -123,8 +122,6 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
 
 
     // std::cout << "Player position: " << m_playerPosition.x << ", " << m_playerPosition.y << " | " << (int)std::floor(m_playerPosition.x / TILE_SIZE) << ", " << (int)std::floor(m_playerPosition.y / TILE_SIZE) << std::endl;
-
-
     for (int y = bottom; y <= top; y++)
     {
         for (int x = left; x <= right; x++)
@@ -177,7 +174,6 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
     top = worldToTile(m_playerPosition.y + m_collideRadii.y);
     bottom = worldToTile(m_playerPosition.y);
 
-
     for (int y = bottom; y <= top; y++)
     {
         for (int x = left; x <= right; x++)
@@ -189,7 +185,6 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
 
             if (Intersects({{m_playerPosition.x - m_collideRadii.x, m_playerPosition.y}, {m_collideRadii.x * 2, m_collideRadii.y}}, {{x * TILE_SIZE, y * TILE_SIZE}, {TILE_SIZE, TILE_SIZE}}))
             {
-
                 if (m_vel.y > 0.0f)
                 {
                     // std::cout << "Collide player top: " << tileBottom << " " << m_playerPosition.y << std::endl;

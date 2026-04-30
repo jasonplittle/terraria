@@ -104,7 +104,7 @@ void Mob::updateAttack(float dt, Player& player, float distance)
     m_vel.x = 0;
     m_attackTimer += dt;
 
-    if (m_attackTimer > 0.5f)
+    if (m_attackTimer > 1.0f)
     {
         if (distance < 20.f)
         {
@@ -163,6 +163,19 @@ void Mob::Update(float deltaTime, Player& player, World& world)
             updateAttack(deltaTime, player, distance);
             m_sprites[MobPart::CLOTHES]->SetColor({(236 + (m_attackTimer * 18))  / 255.f, (100 + (m_attackTimer * 155)) / 255.f, (130 + (m_attackTimer * 125)) / 255.f, 1.0f});
             break;
+    }
+
+    // Detect attack
+    if (player.IsAttacking() && distance < 20.f)
+    {
+        if (player.IsMovingRight() && m_position.x - player.GetPlayerPosition().x > 0)
+        {
+            m_isAlive = false;
+        }
+        else if (!player.IsMovingRight() && m_position.x - player.GetPlayerPosition().x < 0)
+        {
+            m_isAlive = false;
+        }
     }
 
     m_position.x += m_vel.x * deltaTime;

@@ -72,8 +72,6 @@ void World::Update(const Player& player)
         int chunkCoord = (int)std::floor(worldX / TILE_SIZE / CHUNK_WIDTH);
         Tile tile = m_chunks.at(chunkCoord).getTileFromWorldX(worldX, worldY);
         
-        Tile replaceTile;
-        
         if (tile == Tile::DIRT)
         {
             m_chunks.at(chunkCoord).SetTileFrom(worldX, worldY, Tile::AIR);
