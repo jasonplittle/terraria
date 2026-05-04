@@ -27,6 +27,8 @@
 #include "DayLighting.hpp"
 #include "DayLightingRenderer.hpp"
 
+#include "TorchManager.hpp"
+
 
 
 
@@ -76,6 +78,7 @@ int main()
     World world = World();
 
     DayLighting dayLighting = DayLighting();
+    TorchManager torchManager = TorchManager();
 
     float lastTime = glfwGetTime();
     float currentTime;
@@ -86,6 +89,7 @@ int main()
     bool isMovingLeft = false;
     bool isMovingRight = false;
     bool isAttacking = false;
+    bool isPlacingTorch = false;
 
     int width, height;
 
@@ -103,6 +107,7 @@ int main()
         isMovingLeft = false;
         isMovingRight = false;
         isAttacking = false;
+        isPlacingTorch = false;
 
         if (Input::Instance().IsKeyPressed(window, GLFW_KEY_UP))
         {
@@ -124,6 +129,10 @@ int main()
         {
             isAttacking = true;
         }
+        if (Input::Instance().IsKeyPressed(window, GLFW_KEY_V))
+        {
+            isPlacingTorch = true;
+        }
 
         currentTime = glfwGetTime();
         dt = currentTime - lastTime;
@@ -136,6 +145,7 @@ int main()
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, isAttacking, world);
         mobManager.Update(dt, player, world);
         world.Update(player);
+        torchManager.Update(dt, player, isPlacingTorch);
         dayLighting.Update(dt);
 
         backgroundRenderer.Render({VIRTUAL_WIDTH, VIRTUAL_HEIGHT});

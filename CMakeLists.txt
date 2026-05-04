@@ -24,6 +24,7 @@ add_executable("${CMAKE_PROJECT_NAME}"
     ${CMAKE_SOURCE_DIR}/src/game/MobManager.cpp
     ${CMAKE_SOURCE_DIR}/src/game/DayLighting.cpp
     ${CMAKE_SOURCE_DIR}/src/game/DayLightingRenderer.cpp
+    ${CMAKE_SOURCE_DIR}/src/game/TorchManager.cpp
 
     ${CMAKE_SOURCE_DIR}/src/renderer/Renderer.cpp 
     ${CMAKE_SOURCE_DIR}/src/renderer/IndexBuffer.cpp 
