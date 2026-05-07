@@ -24,7 +24,7 @@ void WorldRenderer::Render(World& world, const Player& player, Vec2 screenSize)
 
     glm::mat4 projection = glm::ortho(-zoomX, zoomX, -zoomY, zoomY, -1.0f, 1.0f);
     glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-cameraPos.x, -cameraPos.y, 0));
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0));    
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 0.0));
     
     glm::mat4 mvp = projection * view * model;
 

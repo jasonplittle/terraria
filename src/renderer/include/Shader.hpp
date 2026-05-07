@@ -23,9 +23,11 @@ public:
 
     void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
     void SetUniform1f(const std::string& name, float v0);
+    void SetUniform2f(const std::string& name, float v0, float v1);
     void SetUniform1i(const std::string& name, int v0);
     void SetUniform1iv(const std::string& name, unsigned int count, const int* values);
     void SetUniformMat4f(const std::string& name, const glm::mat4& mat);
+    void SetUniform2fv(const std::string& name, unsigned int count, const float* values);
 
 
 private:

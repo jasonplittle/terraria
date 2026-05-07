@@ -12,10 +12,10 @@ DayLightingRenderer::DayLightingRenderer()
     };
 
     float verticies[] = {
-        -0.5f, -0.5f,
-         0.5f, -0.5f,
-         0.5f,  0.5f,
-        -0.5f,  0.5f
+        -1.0f, -1.0f,
+         1.0f, -1.0f,
+         1.0f,  1.0f,
+        -1.0f,  1.0f
     };
 
     m_shader = std::make_unique<Shader>("src/renderer/shaders/DayLighting.shader");
@@ -30,28 +30,26 @@ DayLightingRenderer::DayLightingRenderer()
     m_vertexArray->AddBuffer(*m_vertexBuffer, layout);
 }
 
-void DayLightingRenderer::Render(const DayLighting& dayLighting, Vec2 screenSize)
+void DayLightingRenderer::Render(const DayLighting& dayLighting, const TorchManager& torchManager, const Player& player, Vec2 screenSize)
 {
     Renderer renderer;
 
-    float zoomX = screenSize.x;
-    float zoomY = screenSize.y;
+    float zoomX = screenSize.x * 0.5 * 0.75;
+    float zoomY = screenSize.y * 0.5 * 0.75;
 
-    glm::mat4 projection = glm::ortho(-zoomX, zoomX, -zoomY, zoomY, -1.0f, 1.0f);
-    glm::mat4 view = glm::mat4(1.0f);
-    glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(
-        zoomX * 2,
-        zoomY * 2,
-        1.0f
-    ));
-
-    glm::mat4 mvp = projection * view * model;
-
+    glm::vec2 cameraPos = 
+    {
+        player.GetPlayerPosition().x,
+        player.GetPlayerPosition().y
+    };
 
     m_shader->Bind();
-    m_shader->SetUniformMat4f("u_MVP", mvp);
-    
     m_shader->SetUniform1f("u_Lighting", dayLighting.GetLighting());
-    renderer.Draw(*m_vertexArray, *m_indexBuffer, *m_shader);
+    m_shader->SetUniform2f("u_CameraPos", cameraPos.x, cameraPos.y);
+    m_shader->SetUniform2f("u_HalfWorldSize", zoomX, zoomY);
+    m_shader->SetUniform1f("u_TorchRadius", 100.0f);
+    m_shader->SetUniform2fv("u_TorchPositions", torchManager.GetTorches().size(), &torchManager.GetTorches()[0].x);
+    m_shader->SetUniform1i("u_TorchCount", torchManager.GetTorches().size());
 
+    renderer.Draw(*m_vertexArray, *m_indexBuffer, *m_shader);
 }

@@ -141,7 +141,6 @@ int main()
         glfwGetWindowSize(window, &width, &height);
         renderer.Viewport(width, height);
 
-        // player.UpdateCreative(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, world);
         player.Update(dt, isMovingUp, isMovingDown, isMovingLeft, isMovingRight, isAttacking, world);
         mobManager.Update(dt, player, world);
         world.Update(player);
@@ -153,7 +152,7 @@ int main()
         worldRenderer.Render(world, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
         playerRenderer.Render(player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
         mobRenderer.Render(mobManager, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
-        dayLightingRenderer.Render(dayLighting, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
+        dayLightingRenderer.Render(dayLighting, torchManager, player, {VIRTUAL_WIDTH, VIRTUAL_HEIGHT});
 
         glfwSwapBuffers(window);
 		glfwPollEvents();

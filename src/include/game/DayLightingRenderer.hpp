@@ -10,14 +10,14 @@
 #include "Renderer.hpp"
 
 #include "DayLighting.hpp"
+#include "TorchManager.hpp"
 
 
 class DayLightingRenderer
 {
 public:
     DayLightingRenderer();
-
-    void Render(const DayLighting& dayLighting, Vec2 screenSize);
+    void Render(const DayLighting& dayLighting, const TorchManager& torchManager, const Player& player, Vec2 screenSize);
 
 private:
     std::unique_ptr<Shader> m_shader;
