@@ -106,10 +106,7 @@ void Mob::updateAttack(float dt, Player& player, float distance)
 
     if (m_attackTimer > 1.0f)
     {
-        if (distance < 20.f)
-        {
-            player.TakeDamage(50.f - distance);
-        }
+        player.RecieveExplosion(m_position, 10000.f);
         m_attackTimer = 0.0f;
         m_isAlive = false;
     }

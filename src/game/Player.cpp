@@ -107,7 +107,18 @@ void Player::Update(float deltaTime, bool isMovingUp, bool isMovingDown, bool is
         m_isMovingRight = true;
     }
 
-    if (!isMovingLeft && !isMovingRight)
+    // if (!isMovingLeft && !isMovingRight)
+    // {
+    //     m_vel.x = 0;
+    // }
+
+    int dir = m_vel.x > 0 ? -1 : 1;
+    if (!m_isInAir)
+    {
+        m_vel.x += (GROUND_FRICTION * dir) * deltaTime;
+    }
+
+    if (m_vel.x < 100 && m_vel.x > -100.f)
     {
         m_vel.x = 0;
     }
@@ -246,4 +257,21 @@ void Player::TakeDamage(float damage)
     m_health -= damage;
 
     std::cout << "Health: " << m_health << std::endl;
+}
+
+void Player::RecieveExplosion(Vec2 sourcePos, float force)
+{
+    float radius = glm::length(glm::vec2(m_playerPosition.x, m_playerPosition.y) - glm::vec2(sourcePos.x, sourcePos.y));
+
+    Vec2 dir = Vec2{m_playerPosition.x - sourcePos.x, m_playerPosition.y - sourcePos.y};
+    float mag = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+
+    Vec2 dirNorm = {dir.x / mag, dir.y / mag};
+
+    float strength = force / radius;
+
+    m_vel.x += dirNorm.x * strength;
+    m_vel.y += dirNorm.y * strength;
+
+    std::cout << "Expl " << radius << " | " << dirNorm.x << ", " << m_vel.x << " | " << dirNorm.y << ", " << m_vel.y << std::endl;
 }

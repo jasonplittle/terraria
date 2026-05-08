@@ -51,6 +51,7 @@ public:
     bool IsMining() const { return m_isMining; }
     bool IsAttacking() const { return m_isAttacking; }
     void TakeDamage(float damage);
+    void RecieveExplosion(Vec2 sourcePos, float force);
 
 private:
     Vec2 m_playerPosition = {0.f, 1500.f};
@@ -75,8 +76,9 @@ private:
     int m_animframe = 0; 
 
 
-    static constexpr int GRAVITY = -1800.0f;
+    static constexpr float GRAVITY = -1800.0f;
     static constexpr float JUMP_VELOCITY = 650.0f;
+    static constexpr float GROUND_FRICTION = 2000.f;
 
     struct AABB {
         glm::vec2 pos;   // bottom-left (or top-left, just be consistent)
